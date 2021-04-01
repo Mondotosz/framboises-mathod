@@ -1,0 +1,7 @@
+{
+    "cSpell.language": "en,fr",
+    "files.associations": {
+        ".stylelintrc": "json"
+    },
+    "css.validate": false
+}
