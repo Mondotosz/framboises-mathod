@@ -3,5 +3,8 @@
     "files.associations": {
         ".stylelintrc": "json"
     },
-    "css.validate": false
+    "css.validate": false,
+    "cSpell.words": [
+        "Mathod"
+    ]
 }
