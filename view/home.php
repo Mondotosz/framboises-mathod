@@ -10,6 +10,9 @@ function viewHome()
 <?php
     $content = ob_get_clean();
 
+    //Meta tag for nav
+    $head = '<meta nav="home">';
+
     require_once "view/template.php";
-    viewTemplate($title, $content);
+    viewTemplate($title, $content, $head);
 }
