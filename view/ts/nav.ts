@@ -20,4 +20,20 @@ jQuery(() => {
         }
 
     })
+
+    // User dropdown
+    // TODO : Export to main
+    $("[data-dropdown]").on("click", (e) => {
+        let target = $(e.target).closest("[data-dropdown]").attr("data-dropdown")
+        if (target) {
+            $(`[data-dropdown-target="${target}"]`).toggleClass("hidden")
+        }
+    })
+
+    $('body').on("click", (e) => {
+        if (!$(e.target).closest("[data-dropdown-target]").length && $("[data-dropdown-target]").not(".hidden").length && !$(e.target).closest("[data-dropdown]").length) {
+            $("[data-dropdown-target]").not(".hidden").addClass("hidden")
+        }
+    })
+
 })

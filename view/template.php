@@ -38,12 +38,22 @@ function viewTemplate($title, $content, $head = null, $foot = null)
                     <a href="#" class="mx-2 py-1 px-2 rounded-md hover:bg-pink-400 hover:text-gray-900">Ouverture</a>
                     <a href="#" class="mx-2 py-1 px-2 rounded-md hover:bg-pink-400 hover:text-gray-900">Images</a>
                 </div>
-                <div class="nav-account flex items-center">
-                    <a href="#">
+                <div class="nav-account relative">
+                    <button data-dropdown="user-menu" class="button flex items-center">
                         <svg class="h-8 stroke-current stroke-2" fill="none" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
-                    </a>
+                    </button>
+                    <div data-dropdown-target="user-menu" class="dropdown origin-top-right hidden absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+                        <div class="py-2">
+                            <?php if (isset($_SESSION["username"])) { ?>
+                                <a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" href="/authentication/logout">déconnexion</a>
+                            <?php } else { ?>
+                                <a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" href="/authentication/login">connexion</a>
+                                <a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" href="/authentication/register">inscription</a>
+                            <?php } ?>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div data-nav-collapse class="nav-mobile hidden lg:hidden flex-col items-center mt-5">
