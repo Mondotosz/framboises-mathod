@@ -6,5 +6,20 @@
     "css.validate": false,
     "cSpell.words": [
         "Mathod"
+    ],
+    "sqltools.connections": [
+        {
+            "mysqlOptions": {
+                "authProtocol": "default"
+            },
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 3306,
+            "driver": "MySQL",
+            "name": "framboises",
+            "database": "framboises",
+            "username": "framboises",
+            "password": "Pa$$w0rd"
+        }
     ]
 }

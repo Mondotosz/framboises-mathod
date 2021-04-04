@@ -12,7 +12,7 @@ function login($request)
             if (!empty($request["username"]) && isset($request["password"])) {
                 try {
                     require_once("model/users.php");
-                    $user = getUserByUsername($request["username"]);
+                    $user = getUseByUsername($request["username"]);
                     if (!empty($user)) {
                         if (password_verify($request["password"], $user["password"])) {
                             createSession($request["username"]);
@@ -60,7 +60,7 @@ function register($request)
 
                     require_once("model/users.php");
                     // check username availability
-                    if (!empty(getUserByUsername($request["username"]))) {
+                    if (!empty(getUseByUsername($request["username"]))) {
                         throw new Exception("Username is already used");
                     }
 
@@ -99,6 +99,10 @@ function logout()
 function createSession($username)
 {
     $_SESSION["username"] = $username;
+    // Get user's roles
+    require_once("model/users_possesses_roles.php");
+    $roles = getUserRoles($username);
+    $_SESSION["roles"] = $roles;
 }
 
 function isAuthenticated()

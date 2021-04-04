@@ -3,7 +3,10 @@
 // create/resume sessions
 session_start();
 
-// Requires
+// Global dependencies
+require_once("lib/utils.php");
+
+// Controllers
 require_once("controller/static.php");
 require_once("controller/authentication.php");
 

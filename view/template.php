@@ -44,15 +44,22 @@ function viewTemplate($title, $content, $head = null, $foot = null)
                             <path stroke-linecap="round" stroke-linejoin="round" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                     </button>
-                    <div data-dropdown-target="user-menu" class="dropdown origin-top-right hidden absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
-                        <div class="py-2">
-                            <?php if (isset($_SESSION["username"])) { ?>
+                    <div data-dropdown-target="user-menu" class="dropdown origin-top-right hidden absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none">
+                        <?php if (isset($_SESSION["username"])) { ?>
+                            <?php if (@in_array_r("administrator", $_SESSION["roles"])) { ?>
+                                <div class="py-2">
+                                    <a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" href="/administration/dashboard">dashboard</a>
+                                </div>
+                            <?php } ?>
+                            <div class="py-2">
                                 <a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" href="/authentication/logout">déconnexion</a>
-                            <?php } else { ?>
+                            </div>
+                        <?php } else { ?>
+                            <div class="py-2">
                                 <a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" href="/authentication/login">connexion</a>
                                 <a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" href="/authentication/register">inscription</a>
-                            <?php } ?>
-                        </div>
+                            </div>
+                        <?php } ?>
                     </div>
                 </div>
             </div>

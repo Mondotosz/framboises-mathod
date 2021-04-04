@@ -9,7 +9,7 @@ function getUsers()
     return $res;
 }
 
-function getUserByUsername($username)
+function getUseByUsername($username)
 {
     require_once("model/dbConnector.php");
     $query = "SELECT * FROM users WHERE username like '$username'";
@@ -38,7 +38,7 @@ function getUserByEmail($email)
     return $res;
 }
 
-function AddUser($username, $email, $password)
+function addUser($username, $email, $password)
 {
     require_once("model/dbConnector.php");
     $query = "INSERT INTO users (username, email, password) VALUES ('$username', '$email', '$password')";
