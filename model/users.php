@@ -38,6 +38,12 @@ function getUserByEmail($email)
     return $res;
 }
 
+function countUsers()
+{
+    require_once("model/dbConnector.php");
+    return countEntries('users');
+}
+
 function addUser($username, $email, $password)
 {
     require_once("model/dbConnector.php");

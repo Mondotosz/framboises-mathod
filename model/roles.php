@@ -18,6 +18,12 @@ function getRoleByName($name)
     return $res;
 }
 
+function countRoles()
+{
+    require_once("model/dbConnector.php");
+    return countEntries('roles');
+}
+
 function addRole($name)
 {
     require_once("model/dbConnector.php");

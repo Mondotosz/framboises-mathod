@@ -62,3 +62,10 @@ function openDBConnexion()
     }
     return $tempDbConnexion;
 }
+
+function countEntries($table){
+    $query = "SELECT COUNT(id) FROM $table";
+
+    $res = executeQuerySelect($query);
+    return $res;
+}
