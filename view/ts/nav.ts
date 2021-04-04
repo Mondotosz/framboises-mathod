@@ -4,7 +4,7 @@ jQuery(() => {
     // Highlights current nav
     let current = $("meta[nav]").attr("nav")
     if (current) {
-        $("[data-nav]").addClass("bg-pink-600 text-gray-50")
+        $(`[data-nav='${current}']`).addClass("bg-pink-600 text-gray-50")
     }
 
     // add toggler functionality
