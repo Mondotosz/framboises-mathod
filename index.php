@@ -47,6 +47,9 @@ switch ($uri) {
     case '/administration/dashboard/images':
         dashboard('images');
         break;
+    case '/administration/dashboard/recipes':
+        dashboard('recipes');
+        break;
     case '/forbidden':
         forbidden();
         break;

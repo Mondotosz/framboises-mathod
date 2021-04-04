@@ -8,7 +8,10 @@ function dashboard($panel = null)
         switch ($panel) {
             case 'overview':
                 require_once("view/assets/components/administrationDashboard/overview.php");
-                $component = componentOverview();
+                require_once("model/users.php");
+                require_once("model/roles.php");
+                $stats = ["users" => countUsers(), "roles" => countRoles()];
+                $component = componentOverview($stats);
                 break;
             case 'users':
                 require_once("model/users.php");

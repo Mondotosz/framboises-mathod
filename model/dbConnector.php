@@ -64,8 +64,8 @@ function openDBConnexion()
 }
 
 function countEntries($table){
-    $query = "SELECT COUNT(id) FROM $table";
+    $query = "SELECT COUNT(id) AS 'count' FROM $table";
 
     $res = executeQuerySelect($query);
-    return $res;
+    return $res[0]["count"];
 }
