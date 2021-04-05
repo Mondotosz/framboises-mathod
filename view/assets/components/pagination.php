@@ -4,7 +4,7 @@ function componentPagination($maxPage, $currentPage, $amount, $url)
 {
     ob_start();
 ?>
-    <div class="flex flex-row divide-x divide-gray-200 justify-center border border-gray-200 rounded-md">
+    <div class="flex flex-row divide-x divide-gray-200 justify-center border border-gray-200 rounded-md w-max">
         <a href="<?= (($currentPage - 1) < 1) ? "" : "$url?page=" . ($currentPage - 1) . "&amount=$amount" ?>" class="py-2 px-3 flex flex-col justify-center<?= (($currentPage - 1) < 1) ? " bg-gray-200" : "" ?>">
             <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
@@ -57,7 +57,7 @@ function componentPaginationStatus($limit, $offset, $max)
 {
     ob_start();
 ?>
-    <div class="flex flex-col justify-center">
+    <div class="flex flex-col justify-center w-max">
         <?php if($offset > $max){ ?>
             <div class="text-sm text-gray-700">Showing <span class="font-medium">0</span> of <span class="font-medium"><?= $max ?></span> results</div>
         <?php }else{ ?>

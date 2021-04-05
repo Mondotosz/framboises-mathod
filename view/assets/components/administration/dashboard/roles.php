@@ -5,7 +5,7 @@
  * @param array roles
  * @return string roles dashboard component
  */
-function componentRoles($roles, $pagination,$paginationStatus = null)
+function componentRoles($roles, $pagination, $paginationStatus = null)
 {
     ob_start();
 ?>
@@ -31,7 +31,7 @@ function componentRoles($roles, $pagination,$paginationStatus = null)
             </div>
 
         <?php } ?>
-        <div class="flex flex-row justify-between px-2">
+        <div class="flex flex-col sm:flex-row sm:justify-between px-2 items-center">
             <?= $paginationStatus ?? "" ?>
             <?= $pagination ?>
         </div>

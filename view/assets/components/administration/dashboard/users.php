@@ -39,7 +39,7 @@ function componentUsers($users, $pagination, $paginationStatus = null)
         <?php
         }
         ?>
-        <div class="flex flex-row justify-between px-2">
+        <div class="flex flex-col sm:flex-row justify-between px-2 items-center">
             <?= $paginationStatus ?? "" ?>
             <?= $pagination ?>
         </div>
