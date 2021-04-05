@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @brief register view
+ * @return void
+ */
 function viewRegister()
 {
     $title = "register";

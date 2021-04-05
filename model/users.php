@@ -2,7 +2,10 @@
 
 /**
  * @brief gets every users from the database
- * @warn 
+ * @warning limits and anf offset must be >= 0
+ * @param int $limit maximum amount of entries returned
+ * @param int $offset entries to be skipped
+ * @return array|null array of users | null on query fail
  */
 function getUsers($limit = null, $offset = null)
 {
@@ -19,6 +22,11 @@ function getUsers($limit = null, $offset = null)
     return $res;
 }
 
+/**
+ * @brief gets user with a given name
+ * @param string username
+ * @return array|null array of user | null on query fail/no match
+ */
 function getUserByUsername($username)
 {
     require_once("model/dbConnector.php");
@@ -33,6 +41,11 @@ function getUserByUsername($username)
     return $res;
 }
 
+/**
+ * @brief gets user with a given email
+ * @param string email
+ * @return array|null array of user | null on query fail/no match
+ */
 function getUserByEmail($email)
 {
     require_once("model/dbConnector.php");
@@ -48,12 +61,24 @@ function getUserByEmail($email)
     return $res;
 }
 
+/**
+ * @brief count users in database
+ * @return int number of entries
+ */
 function countUsers()
 {
     require_once("model/dbConnector.php");
     return countEntries('users');
 }
 
+/**
+ * @brief adds an user to the database
+ * @TODO check if password encryption should be handled by the model
+ * @param string username
+ * @param string email
+ * @param string password (encrypt password)
+ * @return bool|null success | null on query failure
+ */
 function addUser($username, $email, $password)
 {
     require_once("model/dbConnector.php");

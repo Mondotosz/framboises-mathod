@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * @brief administration dashboard view with nav
+ * @param string html component
+ * @param string current nav for highlight
+ * @return void
+ */
 function viewAdministrationDashboard($component = null, $nav = null)
 {
     $title = "dashboard";

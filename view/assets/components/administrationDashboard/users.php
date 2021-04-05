@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * @brief table of users
+ * @param array users
+ * @return string users dashboard component
+ */
 function componentUsers($users)
 {
     ob_start();

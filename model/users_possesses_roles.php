@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * @brief gets all role from a given user
+ * @param string username of the user
+ * @return array|null array of roles | null on query failure
+ */
 function getUserRoles($username)
 {
     require_once("model/dbConnector.php");
@@ -15,6 +20,11 @@ function getUserRoles($username)
     return $res;
 }
 
+/**
+ * @brief get all users from a given role
+ * @param string role name
+ * @return array|null array of users | null on query failure
+ */
 function getRoleUsers($role)
 {
     require_once("model/dbConnector.php");
@@ -30,30 +40,50 @@ function getRoleUsers($role)
     return $res;
 }
 
+/**
+ * @brief adds a role to an user
+ * @param string username of the target user
+ * @param string name of given role
+ * @throws Exception "Couldn't find user"
+ * @throws Exception "Couldn't find role"
+ * @return bool|null success status | null on query failure
+ */
 function addRoleToUser($username, $role)
 {
     require_once("model/dbConnector.php");
 
+    // Fetch user
     require_once("model/users.php");
-    $userID = getUseByUsername($username)["id"];
+    $userID = getUserByUsername($username)["id"];
+    // Check if user exists
     if (empty($userID)) {
         throw new Exception("Couldn't find user");
     }
 
+    // Fetch role
     require_once("model/users.php");
-    $roleID = getUseByUsername($role);
+    $roleID = getUserByUsername($role);
+    // Check if role exists
     if (empty($roleID)) {
         throw new Exception("Couldn't find role");
     }
 
+    // Prepare statement
     $query =
         "INSERT INTO users_possesses_roles (users_id, roles_id)
         VALUES ($userID, $roleID)";
 
+    // Execute insertion query
     $res = executeQueryIUD($query);
     return $res;
 }
 
+/**
+ * @brief check if a given user has a given role
+ * @param string username
+ * @param string role name
+ * @return bool
+ */
 function hasRole($username, $role)
 {
     require_once("model/dbConnector.php");
@@ -66,5 +96,6 @@ function hasRole($username, $role)
         WHERE users.username LIKE '$username' AND roles.name LIKE '$role'";
 
     $res = executeQuerySelect($query);
+    // Check if there were any matches
     return (!empty($res));
 }

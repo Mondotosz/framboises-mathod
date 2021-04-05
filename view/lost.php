@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @brief lost view for unknown routes
+ * @return void
+ */
 function viewLost()
 {
     $title = "lost";

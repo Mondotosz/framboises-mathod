@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @brief homepage view
+ * @return void
+ */
 function viewHome()
 {
     $title = "home";

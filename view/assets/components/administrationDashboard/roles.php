@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * @brief table of roles
+ * @param array roles
+ * @return string roles dashboard component
+ */
 function componentRoles($roles)
 {
     ob_start();

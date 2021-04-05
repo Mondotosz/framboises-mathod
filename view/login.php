@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @brief login view
+ * @return void
+ */
 function viewLogin()
 {
     $title = "login";

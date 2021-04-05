@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @brief forbidden view. used with redirects to /forbidden
+ * @return void
+ */
 function viewForbidden()
 {
     $title = "lost";

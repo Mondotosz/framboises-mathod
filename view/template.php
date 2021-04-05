@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * @brief template view with navbar and footer
+ * @param string title of the page
+ * @param string content placed in main
+ * @param string head placed in header tag
+ * @param string foot placed at the end of the body
+ * @return void
+ */
 function viewTemplate($title, $content, $head = null, $foot = null)
 {
 ?>
