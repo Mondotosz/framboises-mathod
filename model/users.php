@@ -1,15 +1,25 @@
 <?php
 
-function getUsers()
+/**
+ * @brief gets every users from the database
+ * @warn 
+ */
+function getUsers($limit = null, $offset = null)
 {
     require_once("model/dbConnector.php");
-    $query = "SELECT * FROM users";
+    if (isset($limit) && isset($offset)) {
+        $query = "SELECT * FROM users LIMIT $offset, $limit";
+    } else if (isset($limit)) {
+        $query = "SELECT * FROM users LIMIT $limit";
+    } else {
+        $query = "SELECT * FROM users";
+    }
 
     $res = executeQuerySelect($query);
     return $res;
 }
 
-function getUseByUsername($username)
+function getUserByUsername($username)
 {
     require_once("model/dbConnector.php");
     $query = "SELECT * FROM users WHERE username like '$username'";

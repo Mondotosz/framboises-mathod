@@ -63,7 +63,14 @@ function openDBConnexion()
     return $tempDbConnexion;
 }
 
-function countEntries($table){
+/**
+ * @brief count entries in a table
+ * @warning table must have an id column
+ * @TODO handle failure
+ * @param string table name
+ */
+function countEntries($table)
+{
     $query = "SELECT COUNT(id) AS 'count' FROM $table";
 
     $res = executeQuerySelect($query);

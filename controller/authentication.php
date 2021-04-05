@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * @brief handles login requests
+ * @param array Expects $_POST with username and password
+ * @return void
+ */
 function login($request)
 {
     if (!isAuthenticated()) {
@@ -11,9 +16,12 @@ function login($request)
             // check required inputs
             if (!empty($request["username"]) && isset($request["password"])) {
                 try {
+                    // Fetch user from the database
                     require_once("model/users.php");
-                    $user = getUseByUsername($request["username"]);
+                    $user = getUserByUsername($request["username"]);
+                    // Check if user exists
                     if (!empty($user)) {
+                        // Check if password matches
                         if (password_verify($request["password"], $user["password"])) {
                             createSession($request["username"]);
                             header("Location: /");
@@ -24,17 +32,25 @@ function login($request)
                         throw new Exception("Username and password do not match");
                     }
                 } catch (Exception $e) {
+                    // TODO cleaner error display for front end
                     echo $e->getMessage();
                 }
             } else {
+                // If missing required fields
                 header("Location: /authentication/login");
             }
         }
     } else {
+        // If already authenticated
         header("Location: /");
     }
 }
 
+/**
+ * @brief handles register requests
+ * @param array Expects $_POST with username, email, password and passwordCheck
+ * @return void
+ */
 function register($request)
 {
     if (!isAuthenticated()) {
@@ -60,7 +76,7 @@ function register($request)
 
                     require_once("model/users.php");
                     // check username availability
-                    if (!empty(getUseByUsername($request["username"]))) {
+                    if (!empty(getUserByUsername($request["username"]))) {
                         throw new Exception("Username is already used");
                     }
 
@@ -90,12 +106,21 @@ function register($request)
     }
 }
 
+/**
+ * @brief destroys user session and redirects to home
+ * @return void
+ */
 function logout()
 {
     session_destroy();
     header("Location: /");
 }
 
+/**
+ * @brief create an user session
+ * @param string username
+ * @return void
+ */
 function createSession($username)
 {
     $_SESSION["username"] = $username;
@@ -105,7 +130,24 @@ function createSession($username)
     $_SESSION["roles"] = $roles;
 }
 
+/**
+ * @brief checks if the user has an username in session
+ * @return bool
+ */
 function isAuthenticated()
 {
-    return isset($_SESSION["username"]);
+    $result = false;
+    if (isset($_SESSION["username"])) {
+        // Fetch user from the database
+        require_once("model/users.php");
+        $user = getUserByUsername($_SESSION["username"] ?? "");
+        // Check if user exists
+        if (!empty($user)) {
+            $result = true;
+        } else {
+            // Remove username from the session variable since the user doesn't exist anymore
+            unset($_SESSION["username"]);
+        }
+    }
+    return $result;
 }

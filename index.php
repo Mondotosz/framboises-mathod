@@ -36,10 +36,10 @@ switch ($uri) {
         dashboard('overview');
         break;
     case '/administration/dashboard/users':
-        dashboard('users');
+        dashboard('users',$_GET);
         break;
     case '/administration/dashboard/roles':
-        dashboard('roles');
+        dashboard('roles',$_GET);
         break;
     case '/administration/dashboard/openings':
         dashboard('openings');
