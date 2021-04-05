@@ -52,3 +52,18 @@ function componentPagination($maxPage, $currentPage, $amount, $url)
 
     return ob_get_clean();
 }
+
+function componentPaginationStatus($limit, $offset, $max)
+{
+    ob_start();
+?>
+    <div class="flex flex-col justify-center">
+        <?php if($offset > $max){ ?>
+            <div class="text-sm text-gray-700">Showing <span class="font-medium">0</span> of <span class="font-medium"><?= $max ?></span> results</div>
+        <?php }else{ ?>
+        <div class="text-sm text-gray-700">Showing <span class="font-medium"><?= $offset + 1 ?></span> to <span class="font-medium"><?= (($offset + $limit) < $max) ? $offset + $limit : $max ?></span> of <span class="font-medium"><?= $max ?></span> results</div>
+        <?php } ?>
+    </div>
+<?php
+    return ob_get_clean();
+}

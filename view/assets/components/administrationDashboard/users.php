@@ -5,7 +5,7 @@
  * @param array users
  * @return string users dashboard component
  */
-function componentUsers($users, $pagination)
+function componentUsers($users, $pagination, $paginationStatus = null)
 {
     ob_start();
 ?>
@@ -39,7 +39,8 @@ function componentUsers($users, $pagination)
         <?php
         }
         ?>
-        <div class="flex flex-row justify-center">
+        <div class="flex flex-row justify-between px-2">
+            <?= $paginationStatus ?? "" ?>
             <?= $pagination ?>
         </div>
     </div>

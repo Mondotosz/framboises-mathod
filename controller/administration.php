@@ -26,13 +26,15 @@ function dashboard($panel = null, $request = null)
                 // Filters/default page
                 $page = filter_var(@$request["page"], FILTER_VALIDATE_INT, ["options" => ["default" => 1, "min_range" => 1]]) - 1;
                 // Filters/default amount of users per page
-                $amount = filter_var(@$request["amount"], FILTER_VALIDATE_INT, ["options" => ["default" => 20, "min_range" => 1]]);
+                $amount = filter_var(@$request["amount"], FILTER_VALIDATE_INT, ["options" => ["default" => 10, "min_range" => 1]]);
                 // Get users with limits
                 $users = getUsers($amount, $page * $amount);
+                $userCount = countUsers();
                 // Generate pagination
-                $pagination = componentPagination(ceil(countUsers() / $amount), $page + 1, $amount, "/administration/dashboard/users");
+                $pagination = componentPagination(ceil($userCount / $amount), $page + 1, $amount, "/administration/dashboard/users");
+                $paginationStatus = componentPaginationStatus($amount, $page * $amount, $userCount);
                 // Generate component
-                $component = componentUsers($users, $pagination);
+                $component = componentUsers($users, $pagination, $paginationStatus);
                 break;
             case 'roles':
                 require_once("model/roles.php");
@@ -40,11 +42,15 @@ function dashboard($panel = null, $request = null)
                 // Filters/default page
                 $page = filter_var(@$request["page"], FILTER_VALIDATE_INT, ["options" => ["default" => 1, "min_range" => 1]]) - 1;
                 // Filters/default amount of users per page
-                $amount = filter_var(@$request["amount"], FILTER_VALIDATE_INT, ["options" => ["default" => 20, "min_range" => 1]]);
+                $amount = filter_var(@$request["amount"], FILTER_VALIDATE_INT, ["options" => ["default" => 10, "min_range" => 1]]);
                 // Get roles with limits
                 $roles = getRoles($amount, $page * $amount);
+                $roleCount = countRoles();
+                // Generate pagination
+                $pagination = componentPagination(ceil($roleCount / $amount), $page + 1, $amount, "/administration/dashboard/roles");
+                $paginationStatus = componentPaginationStatus($amount, $page * $amount, $roleCount);
                 // Generate component
-                $component = componentRoles($roles);
+                $component = componentRoles($roles, $pagination, $paginationStatus);
                 break;
             default:
                 $component = null;
