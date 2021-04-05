@@ -73,7 +73,6 @@ function countUsers()
 
 /**
  * @brief adds an user to the database
- * @TODO check if password encryption should be handled by the model
  * @param string username
  * @param string email
  * @param string password (encrypt password)
