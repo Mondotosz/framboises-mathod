@@ -86,7 +86,7 @@ function register($request)
                     }
 
                     // add user
-                    if (addUser($request["username"], $request["email"], password_hash($request["password"], PASSWORD_DEFAULT))) {
+                    if (addUser($request["username"], $request["email"], $request["password"])) {
                         createSession($request["username"]);
                         header("Location: /");
                     } else {

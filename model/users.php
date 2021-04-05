@@ -81,6 +81,8 @@ function countUsers()
  */
 function addUser($username, $email, $password)
 {
+    // hash password
+    $password = password_hash($password, PASSWORD_DEFAULT);
     require_once("model/dbConnector.php");
     $query = "INSERT INTO users (username, email, password) VALUES ('$username', '$email', '$password')";
 
