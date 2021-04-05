@@ -9,6 +9,7 @@ function dashboard($panel = null, $request = null)
 {
     // Verify authorizations
     if (isAdmin()) {
+        require_once("view/assets/components/pagination.php");
 
         // Dashboard routing, loads panel components and forward the to the view
         switch ($panel) {
@@ -28,8 +29,10 @@ function dashboard($panel = null, $request = null)
                 $amount = filter_var(@$request["amount"], FILTER_VALIDATE_INT, ["options" => ["default" => 20, "min_range" => 1]]);
                 // Get users with limits
                 $users = getUsers($amount, $page * $amount);
+                // Generate pagination
+                $pagination = componentPagination(ceil(countUsers() / $amount), $page + 1, $amount, "/administration/dashboard/users");
                 // Generate component
-                $component = componentUsers($users);
+                $component = componentUsers($users, $pagination);
                 break;
             case 'roles':
                 require_once("model/roles.php");
