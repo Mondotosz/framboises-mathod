@@ -17,5 +17,14 @@ function recipeList($request)
     $pagination = componentPagination(ceil($rowCount / $amount), $page + 1, $amount, "/recipes");
 
     $recipes = getRecipeList();
-    viewRecipeList($recipes,$pagination);
+    foreach ($recipes as $key => $recipe) {
+        foreach($recipe["time"] as $timekey=>$time){
+            if ($time > strtotime("01:00:00")) {
+                $recipes[$key]["time"]["$timekey"] = date("H", $time) . "h" . date("i", $time) . "m";
+            } else {
+                $recipes[$key]["time"][$timekey] = (1 * date("i", $time)) . "m";
+            }
+        }
+    }
+    viewRecipeList($recipes, $pagination);
 }

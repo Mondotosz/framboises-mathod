@@ -74,12 +74,13 @@ function getRecipeList($limit = null, $offset = null)
                 "description" => $entry["description"],
                 "portions" => $entry["portions"],
                 "time" => [
-                    "preparation" => $entry["preparation"],
-                    "cooking" => $entry["cooking"],
-                    "rest" => $entry["rest"]
+                    "preparation" => strtotime($entry["preparation"],0),
+                    "cooking" => strtotime($entry["cooking"],0),
+                    "rest" => strtotime($entry["rest"],0),
                 ],
                 "images" => empty($entry["image"]) ? [] : [$entry["image"]]
             ];
+            $list[$entry["id"]]["time"]["total"] = $list[$entry["id"]]["time"]["preparation"] + $list[$entry["id"]]["time"]["cooking"] + $list[$entry["id"]]["time"]["rest"];
         } else {
             if (!empty($entry["image"])) {
                 array_push($list[$entry["id"]]["images"], $entry["image"]);
