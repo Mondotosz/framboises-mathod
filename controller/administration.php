@@ -21,26 +21,9 @@ function dashboard($panel = null, $request = null)
                 $component = componentOverview($stats);
                 break;
             case 'users':
-                $component = usersPanel(@$request["page"], @$request["amount"]);
-                break;
             case 'roles':
-                $component = rolesPanel(@$request["page"], @$request["amount"]);
-                break;
             case 'recipes':
-                require_once("model/recipes.php");
-                require_once("view/assets/components/administration/dashboard/recipes.php");
-                // Filters/default page
-                $page = filter_var(@$request["page"], FILTER_VALIDATE_INT, ["options" => ["default" => 1, "min_range" => 1]]) - 1;
-                // Filters/default amount of users per page
-                $amount = filter_var(@$request["amount"], FILTER_VALIDATE_INT, ["options" => ["default" => 10, "min_range" => 1]]);
-                // Get recipes with limits
-                $recipes = getRecipes($amount, $page * $amount);
-                $recipeCount = countRecipes();
-                // Generate pagination
-                $pagination = componentPagination(ceil($recipeCount / $amount), $page + 1, $amount, "/administration/dashboard/roles");
-                $paginationStatus = componentPaginationStatus($amount, $page * $amount, $recipeCount);
-                // Generate component
-                $component = componentRecipes($recipes, $pagination, $paginationStatus);
+                $component = table($panel, @$request["page"], @$request["amount"]);
                 break;
             default:
                 $component = null;
@@ -64,37 +47,51 @@ function isAdmin()
     return hasRole($_SESSION["username"], "administrator");
 }
 
-function usersPanel($page, $amount)
+function table($table, $page, $amount)
 {
-    require_once("model/users.php");
-    require_once("view/assets/components/administration/dashboard/users.php");
-    // Filters/default page
-    $page = filter_var($page, FILTER_VALIDATE_INT, ["options" => ["default" => 1, "min_range" => 1]]) - 1;
-    // Filters/default amount of users per page
-    $amount = filter_var($amount, FILTER_VALIDATE_INT, ["options" => ["default" => 10, "min_range" => 1]]);
-    // Get users with limits
-    $users = getUsers($amount, $page * $amount);
-    $userCount = countUsers();
-    // Generate pagination
-    $pagination = componentPagination(ceil($userCount / $amount), $page + 1, $amount, "/administration/dashboard/users");
-    $paginationStatus = componentPaginationStatus($amount, $page * $amount, $userCount);
-    // Generate component
-    return componentUsers($users, $pagination, $paginationStatus);
-}
-function rolesPanel($page, $amount)
-{
-    require_once("model/roles.php");
-    require_once("view/assets/components/administration/dashboard/roles.php");
+    require_once("view/assets/components/table.php");
+
     // Filters/default page
     $page = filter_var($page, FILTER_VALIDATE_INT, ["options" => ["default" => 1, "min_range" => 1]]) - 1;
     // Filters/default amount of roles per page
     $amount = filter_var($amount, FILTER_VALIDATE_INT, ["options" => ["default" => 10, "min_range" => 1]]);
-    // Get roles with limits
-    $roles = getRoles($amount, $page * $amount);
-    $roleCount = countRoles();
-    // Generate pagination
-    $pagination = componentPagination(ceil($roleCount / $amount), $page + 1, $amount, "/administration/dashboard/roles");
-    $paginationStatus = componentPaginationStatus($amount, $page * $amount, $roleCount);
-    // Generate component
-    return componentRoles($roles, $pagination, $paginationStatus);
+
+    $unknown = false;
+    switch ($table) {
+        case "users":
+            require_once("model/users.php");
+            // Get users with limits
+            $rows = getUsers($amount, $page * $amount);
+            $rowCount = countUsers();
+            $header = ["id" => "ID", "username" => "Nom d'utilisateur", "email" => "Email", "creation_date" => "Date de création"];
+            break;
+        case "roles":
+            require_once("model/roles.php");
+            // Get roles with limits
+            $rows = getRoles($amount, $page * $amount);
+            $rowCount = countRoles();
+            $header = ["id" => "ID", "name" => "Nom"];
+            break;
+        case "recipes":
+            require_once("model/recipes.php");
+            // Get recipes with limits
+            $rows = getRecipes($amount, $page * $amount);
+            $rowCount = countRecipes();
+            $header = ["id" => "ID", "name" => "Nom", "description" => "Déscription"];
+            break;
+        default:
+            $unknown = true;
+    }
+
+    if ($unknown) {
+        $component = $null;
+    } else {
+        // Generate pagination
+        $pagination = componentPagination(ceil($rowCount / $amount), $page + 1, $amount, "/administration/dashboard/$table");
+        $paginationStatus = componentPaginationStatus($amount, $page * $amount, $rowCount);
+        // Generate component
+        $component = componentTable($header, $rows, $pagination, $paginationStatus);
+    }
+
+    return $component;
 }
