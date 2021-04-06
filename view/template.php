@@ -40,11 +40,11 @@ function viewTemplate($title, $content, $head = null, $foot = null)
                 </a>
                 <div class="nav-desktop hidden lg:flex items-center">
                     <a data-nav="home" href="/home" class="mx-2 py-1 px-2 rounded-md hover:bg-pink-400 hover:text-gray-900">Accueil</a>
-                    <a href="#" class="mx-2 py-1 px-2 rounded-md hover:bg-pink-400 hover:text-gray-900">Variétés</a>
-                    <a href="#" class="mx-2 py-1 px-2 rounded-md hover:bg-pink-400 hover:text-gray-900">Recettes</a>
-                    <a href="#" class="mx-2 py-1 px-2 rounded-md hover:bg-pink-400 hover:text-gray-900">Nous trouver</a>
-                    <a href="#" class="mx-2 py-1 px-2 rounded-md hover:bg-pink-400 hover:text-gray-900">Ouverture</a>
-                    <a href="#" class="mx-2 py-1 px-2 rounded-md hover:bg-pink-400 hover:text-gray-900">Images</a>
+                    <a data-nav="varieties" href="/varieties" class="mx-2 py-1 px-2 rounded-md hover:bg-pink-400 hover:text-gray-900">Variétés</a>
+                    <a data-nav="recipes" href="/recipes" class="mx-2 py-1 px-2 rounded-md hover:bg-pink-400 hover:text-gray-900">Recettes</a>
+                    <a data-nav="location" href="/location" class="mx-2 py-1 px-2 rounded-md hover:bg-pink-400 hover:text-gray-900">Nous trouver</a>
+                    <a data-nav="openings" href="/openings" class="mx-2 py-1 px-2 rounded-md hover:bg-pink-400 hover:text-gray-900">Ouverture</a>
+                    <a data-nav="images" href="/images" class="mx-2 py-1 px-2 rounded-md hover:bg-pink-400 hover:text-gray-900">Images</a>
                 </div>
                 <div class="nav-account relative">
                     <button data-dropdown="user-menu" class="button flex items-center">
@@ -73,14 +73,14 @@ function viewTemplate($title, $content, $head = null, $foot = null)
             </div>
             <div data-nav-collapse class="nav-mobile hidden lg:hidden flex-col items-center mt-5">
                 <a data-nav="home" href="/home" class="mx-2 py-1 px-2 rounded-md hover:bg-pink-400">Accueil</a>
-                <a href="#" class="mx-2 py-1 px-2 rounded-md hover:bg-pink-400">Variétés</a>
-                <a href="#" class="mx-2 py-1 px-2 rounded-md hover:bg-pink-400">Recettes</a>
-                <a href="#" class="mx-2 py-1 px-2 rounded-md hover:bg-pink-400">Nous trouver</a>
-                <a href="#" class="mx-2 py-1 px-2 rounded-md hover:bg-pink-400">Ouverture</a>
-                <a href="#" class="mx-2 py-1 px-2 rounded-md hover:bg-pink-400">Images</a>
+                <a data-nav="varieties" href="/varieties" class="mx-2 py-1 px-2 rounded-md hover:bg-pink-400">Variétés</a>
+                <a data-nav="recipes" href="/recipes" class="mx-2 py-1 px-2 rounded-md hover:bg-pink-400">Recettes</a>
+                <a data-nav="location" href="/location" class="mx-2 py-1 px-2 rounded-md hover:bg-pink-400">Nous trouver</a>
+                <a data-nav="openings" href="/openings" class="mx-2 py-1 px-2 rounded-md hover:bg-pink-400">Ouverture</a>
+                <a data-nav="images" href="/images" class="mx-2 py-1 px-2 rounded-md hover:bg-pink-400">Images</a>
             </div>
         </header>
-        <main class="justify-self-start w-full lg:max-w-7xl mx-auto">
+        <main class="justify-self-start flex-grow flex flex-col justify-center w-full lg:max-w-7xl mx-auto">
             <?= $content ?? "no content" ?>
         </main>
         <footer class="flex justify-center bg-pink-300 p-2">

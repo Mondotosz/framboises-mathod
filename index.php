@@ -10,6 +10,7 @@ require_once("lib/utils.php");
 require_once("controller/static.php");
 require_once("controller/authentication.php");
 require_once("controller/administration.php");
+require_once("controller/recipes.php");
 
 // Router
 // Remove get parameters
@@ -21,6 +22,9 @@ switch ($uri) {
     case '/':
     case '/home':
         home();
+        break;
+    case '/recipes':
+        recipeList($_GET);
         break;
     case '/authentication/login':
         login($_POST);
@@ -36,10 +40,10 @@ switch ($uri) {
         dashboard('overview');
         break;
     case '/administration/dashboard/users':
-        dashboard('users',$_GET);
+        dashboard('users', $_GET);
         break;
     case '/administration/dashboard/roles':
-        dashboard('roles',$_GET);
+        dashboard('roles', $_GET);
         break;
     case '/administration/dashboard/openings':
         dashboard('openings');
@@ -48,7 +52,7 @@ switch ($uri) {
         dashboard('images');
         break;
     case '/administration/dashboard/recipes':
-        dashboard('recipes',$_GET);
+        dashboard('recipes', $_GET);
         break;
     case '/forbidden':
         forbidden();

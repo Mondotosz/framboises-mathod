@@ -43,6 +43,52 @@ function getRecipesByName($name)
     return $res;
 }
 
+
+function getRecipeList($limit = null, $offset = null)
+{
+    require_once("model/dbConnector.php");
+    $bindValue = [];
+    $limitString = "";
+    if (isset($limit) && isset($offset)) {
+        $limitString = "LIMIT :offset , :limit";
+        $bindValue = createBinds([[":offset", $offset, PDO::PARAM_INT], [":limit", $limit, PDO::PARAM_INT]]);
+    } else if (isset($limit)) {
+        $limitString = "LIMIT :limit";
+        $bindValue = createBinds([[":limit", $limit, PDO::PARAM_INT]]);
+    }
+
+    $query =
+        "SELECT recipes.id, recipes.name, recipes.portions, recipes.preparation, recipes.cooking, recipes.rest, recipes.description, images.path AS 'image' FROM recipes
+	    LEFT JOIN images ON images.recipes_id = recipes.id
+        ORDER BY recipes.id, images.id ASC $limitString;";
+
+    $res = executeQuerySelect($query, $bindValue);
+
+    // merge images
+    $list = [];
+    foreach ($res as $entry) {
+        if (empty($list[$entry["id"]])) {
+            $list[$entry["id"]] = [
+                "id" => $entry["id"],
+                "name" => $entry["name"],
+                "description" => $entry["description"],
+                "portions" => $entry["portions"],
+                "time" => [
+                    "preparation" => $entry["preparation"],
+                    "cooking" => $entry["cooking"],
+                    "rest" => $entry["rest"]
+                ],
+                "images" => empty($entry["image"]) ? [] : [$entry["image"]]
+            ];
+        } else {
+            if (!empty($entry["image"])) {
+                array_push($list[$entry["id"]]["images"], $entry["image"]);
+            }
+        }
+    }
+
+    return $list;
+}
 /**
  * @brief count recipes in database
  * @return int number of entries
