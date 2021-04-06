@@ -29,7 +29,7 @@ function getRecipes($limit = null, $offset = null)
  * @brief gets recipe with a given name
  * @return array|null array of recipe | null on query fail/no match
  */
-function getRecipesByName($name)
+function getRecipeByName($name)
 {
     require_once("model/dbConnector.php");
     $query = "SELECT * FROM recipes WHERE name like :name";
@@ -74,9 +74,9 @@ function getRecipeList($limit = null, $offset = null)
                 "description" => $entry["description"],
                 "portions" => $entry["portions"],
                 "time" => [
-                    "preparation" => strtotime($entry["preparation"],0),
-                    "cooking" => strtotime($entry["cooking"],0),
-                    "rest" => strtotime($entry["rest"],0),
+                    "preparation" => strtotime($entry["preparation"], 0),
+                    "cooking" => strtotime($entry["cooking"], 0),
+                    "rest" => strtotime($entry["rest"], 0),
                 ],
                 "images" => empty($entry["image"]) ? [] : [$entry["image"]]
             ];
@@ -90,6 +90,21 @@ function getRecipeList($limit = null, $offset = null)
 
     return $list;
 }
+
+function getRecipe($id)
+{
+    require_once("model/dbConnector.php");
+    $query = "SELECT * FROM recipes WHERE id = :id";
+    $res = executeQuerySelect($query, createBinds([[":id", $id,PDO::PARAM_INT]]));
+    // only return the first match
+    if (empty($res[0])) {
+        $res = null;
+    } else {
+        $res = $res[0];
+    }
+    return $res;
+}
+
 /**
  * @brief count recipes in database
  * @return int number of entries

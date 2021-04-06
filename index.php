@@ -26,6 +26,9 @@ switch ($uri) {
     case '/recipes':
         recipeList($_GET);
         break;
+    case preg_match("/^\/recipes\/(\d+)\/?$/", $uri, $res) ? $uri : null:
+        recipe($res[1]);
+        break;
     case '/authentication/login':
         login($_POST);
         break;

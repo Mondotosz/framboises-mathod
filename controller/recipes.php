@@ -18,7 +18,7 @@ function recipeList($request)
 
     $recipes = getRecipeList();
     foreach ($recipes as $key => $recipe) {
-        foreach($recipe["time"] as $timekey=>$time){
+        foreach ($recipe["time"] as $timekey => $time) {
             if ($time > strtotime("01:00:00")) {
                 $recipes[$key]["time"]["$timekey"] = date("H", $time) . "h" . date("i", $time) . "m";
             } else {
@@ -27,4 +27,18 @@ function recipeList($request)
         }
     }
     viewRecipeList($recipes, $pagination);
+}
+
+function recipe($id)
+{
+    require_once("view/recipe.php");
+    require_once("model/recipes.php");
+
+    $recipe = getRecipe($id);
+    if (!empty($recipe)) {
+        require_once("model/recipes_require_ingredients.php");
+        $recipe["ingredients"] = getRecipeIngredients($id);
+    }
+
+    viewRecipe($recipe);
 }
