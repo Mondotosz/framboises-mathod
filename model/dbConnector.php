@@ -1,17 +1,25 @@
 <?php
+//TODO refactor with bind params
 
 /**
  * This function is designed to execute a query received as parameter
  * @param $query : must be correctly build for sql (synthaxis) but the protection against sql injection will be done there
+ * @param array $params [":queryBind",$value] for sql injection prevention
  * @return array|null : get the query result (can be null)
  */
-function executeQuerySelect($query)
+function executeQuerySelect($query, $binds = [])
 {
     $queryResult = null;
 
     $dbConnexion = openDBConnexion(); //open database connexion
     if ($dbConnexion != null) {
         $statement = $dbConnexion->prepare($query); //prepare query
+
+        // Bind params for safety
+        foreach ($binds as $bind) {
+            $statement->bindParam($bind["name"], $bind["value"], $bind["type"] ?? PDO::PARAM_STR);
+        }
+
         $statement->execute(); //execute query
         $queryResult = $statement->fetchAll(); //prepare result for client
     }
@@ -22,15 +30,22 @@ function executeQuerySelect($query)
 /**
  * This function is designed to insert value in database
  * @param $query
- * @return bool|null : $statement->execute() returne true is the insert was successful
+ * @param array $binds [":queryBind",$value] for sql injection prevention
+ * @return bool|null : $statement->execute() return true is the insert was successful
  */
-function executeQueryIUD($query)
+function executeQueryIUD($query, $binds = [])
 {
     $queryResult = null;
 
     $dbConnexion = openDBConnexion(); //open database connexion
     if ($dbConnexion != null) {
         $statement = $dbConnexion->prepare($query); //prepare query
+
+        // bind params for safety
+        foreach ($binds as $bind) {
+            $statement->bindParam($bind["name"], $bind["value"], $bind["type"] ?? PDO::PARAM_STR);
+        }
+
         $queryResult = $statement->execute(); //execute query
     }
     $dbConnexion = null; //close database connexion
@@ -73,6 +88,37 @@ function countEntries($table)
 {
     $query = "SELECT COUNT(id) AS 'count' FROM $table";
 
-    $res = executeQuerySelect($query);
+    $res = executeQuerySelect($query, []);
     return $res[0]["count"];
+}
+
+/**
+ * @brief creates a binds array ["name" => $name, "value" => $value, "type" => $type]
+ * @param string binding name in sql Eg. ":id"
+ * @param mixed value to be checked and stored
+ * @param int PDO::PARAM_type datatype in the database, defaults to string
+ * @return array array with key/value pairs to be stored in an array passed to query execution
+ */
+function createBind($name, $value, $type = PDO::PARAM_STR)
+{
+    return ["name" => $name, "value" => $value, "type" => $type];
+}
+
+/**
+ * @brief creates a 2d array with binds for query execution
+ * @param array expected [[":param",value,PDO::PARAM_INT],[":otherParam",otherValue]]
+ * @return array 2d array ready for query execution
+ */
+function createBinds($arr)
+{
+    $binds = [];
+    foreach ($arr as $bind) {
+        if (count($bind) < 2) {
+            throw new Exception("Binds expect 2-3 values");
+        } else {
+            $tmp = createBind($bind[0], $bind[1], isset($bind[2]) ? $bind[2] : PDO::PARAM_STR);
+            array_push($binds,$tmp);
+        }
+    }
+    return $binds;
 }

@@ -10,15 +10,17 @@
 function getRoles($limit = null, $offset = null)
 {
     require_once("model/dbConnector.php");
+    $bindValue = [];
     if (isset($limit) && isset($offset)) {
-        $query = "SELECT * FROM roles LIMIT $offset, $limit";
+        $query = "SELECT * FROM roles LIMIT :offset , :limit";
+        $bindValue = createBinds([[":offset", $offset, PDO::PARAM_INT],[":limit", $limit, PDO::PARAM_INT]]);
     } else if (isset($limit)) {
-        $query = "SELECT * FROM roles LIMIT $limit";
+        $query = "SELECT * FROM roles LIMIT :limit";
+        $bindValue = createBinds([[":limit", $limit, PDO::PARAM_INT]]);
     } else {
         $query = "SELECT * FROM roles";
     }
-    file_put_contents("log.log", $query ."\n", FILE_APPEND);
-    $res = executeQuerySelect($query);
+    $res = executeQuerySelect($query, $bindValue);
     return $res;
 }
 
@@ -30,9 +32,9 @@ function getRoles($limit = null, $offset = null)
 function getRoleByName($name)
 {
     require_once("model/dbConnector.php");
-    $query = "SELECT * FROM roles WHERE name LIKE '$name'";
+    $query = "SELECT * FROM roles WHERE name LIKE :name";
 
-    $res = executeQuerySelect($query);
+    $res = executeQuerySelect($query, createBinds([[":name",$name]]));
     return $res;
 }
 
@@ -54,8 +56,8 @@ function countRoles()
 function addRole($name)
 {
     require_once("model/dbConnector.php");
-    $query = "INSERT INTO roles (name) VALUES ('$name')";
+    $query = "INSERT INTO roles (name) VALUES (:name)";
 
-    $res = executeQueryIUD($query);
+    $res = executeQueryIUD($query, [":name" => $name]);
     return $res;
 }

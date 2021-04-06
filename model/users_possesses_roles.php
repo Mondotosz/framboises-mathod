@@ -14,9 +14,9 @@ function getUserRoles($username)
 		    ON users.id = join_table.users_id
 	    LEFT OUTER JOIN roles
 		    ON roles.id = join_table.roles_id
-	    WHERE users.username LIKE '$username'";
+	    WHERE users.username LIKE :username";
 
-    $res = executeQuerySelect($query);
+    $res = executeQuerySelect($query, createBinds([[":username", $username]]));
     return $res;
 }
 
@@ -34,9 +34,9 @@ function getRoleUsers($role)
             ON users.id = join_table.users_id
         LEFT OUTER JOIN roles
             ON roles.id = join_table.roles_id
-        WHERE roles.name LIKE '$role'";
+        WHERE roles.name LIKE :role";
 
-    $res = executeQuerySelect($query);
+    $res = executeQuerySelect($query, createBinds([[":role", $role]]));
     return $res;
 }
 
@@ -71,10 +71,10 @@ function addRoleToUser($username, $role)
     // Prepare statement
     $query =
         "INSERT INTO users_possesses_roles (users_id, roles_id)
-        VALUES ($userID, $roleID)";
+        VALUES (:userID, :roleID)";
 
     // Execute insertion query
-    $res = executeQueryIUD($query);
+    $res = executeQueryIUD($query, createBinds([[":userID", $userID, PDO::PARAM_INT], [":roleID", $roleID, PDO::PARAM_INT]]));
     return $res;
 }
 
@@ -93,9 +93,9 @@ function hasRole($username, $role)
             ON users.id = join_table.users_id
         LEFT OUTER JOIN roles
             ON roles.id = join_table.roles_id
-        WHERE users.username LIKE '$username' AND roles.name LIKE '$role'";
+        WHERE users.username LIKE :username AND roles.name LIKE :role";
 
-    $res = executeQuerySelect($query);
+    $res = executeQuerySelect($query, createBinds([[":username", $username], [":role", $role]]));
     // Check if there were any matches
     return (!empty($res));
 }

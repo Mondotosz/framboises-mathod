@@ -10,15 +10,18 @@
 function getUsers($limit = null, $offset = null)
 {
     require_once("model/dbConnector.php");
+    $bindValue = [];
     if (isset($limit) && isset($offset)) {
-        $query = "SELECT * FROM users LIMIT $offset, $limit";
+        $query = "SELECT * FROM users LIMIT :offset, :limit";
+        $bindValue = createBinds([[":offset", $offset, PDO::PARAM_INT], [":limit", $limit, PDO::PARAM_INT]]);
     } else if (isset($limit)) {
-        $query = "SELECT * FROM users LIMIT $limit";
+        $query = "SELECT * FROM users LIMIT :limit";
+        $bindValue = createBinds([[":limit", $limit, PDO::PARAM_INT]]);
     } else {
         $query = "SELECT * FROM users";
     }
 
-    $res = executeQuerySelect($query);
+    $res = executeQuerySelect($query, $bindValue);
     return $res;
 }
 
@@ -30,8 +33,8 @@ function getUsers($limit = null, $offset = null)
 function getUserByUsername($username)
 {
     require_once("model/dbConnector.php");
-    $query = "SELECT * FROM users WHERE username like '$username'";
-    $res = executeQuerySelect($query);
+    $query = "SELECT * FROM users WHERE username like :username";
+    $res = executeQuerySelect($query, createBinds([[":username",$username]]));
     // only return the first match
     if (empty($res[0])) {
         $res = null;
@@ -49,9 +52,9 @@ function getUserByUsername($username)
 function getUserByEmail($email)
 {
     require_once("model/dbConnector.php");
-    $query = "SELECT * FROM users WHERE email like '$email'";
+    $query = "SELECT * FROM users WHERE email like :email";
 
-    $res = executeQuerySelect($query);
+    $res = executeQuerySelect($query, createBinds([[":email",$email]]));
     // only return the first match
     if (empty($res[0])) {
         $res = null;
@@ -80,11 +83,13 @@ function countUsers()
  */
 function addUser($username, $email, $password)
 {
+    require_once("model/dbConnector.php");
     // hash password
     $password = password_hash($password, PASSWORD_DEFAULT);
-    require_once("model/dbConnector.php");
-    $query = "INSERT INTO users (username, email, password) VALUES ('$username', '$email', '$password')";
+    $query = "INSERT INTO users (username, email, password) VALUES (:username, :email, :password)";
 
-    $res = executeQueryIUD($query);
+
+    $res = executeQueryIUD($query, createBinds([[":username",$username],[":email",$email],[":password",$password]]));
+
     return $res;
 }
