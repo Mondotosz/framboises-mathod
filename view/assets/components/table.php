@@ -6,7 +6,6 @@
  */
 function componentTable($headers, $rows, $pagination = null, $paginationStatus = null)
 {
-    file_put_contents("log.log",print_r($headers,true),FILE_APPEND);
     ob_start();
 ?>
     <div class="flex flex-col space-y-2">
