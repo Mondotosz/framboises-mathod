@@ -17,7 +17,7 @@ function viewRecipeList($recipes, $pagination = null)
                     <a href="/recipes/<?= $recipe["id"] ?>" class="flex flex-row justify-between p-3 sm:rounded-md hover:bg-pink-50 hover:shadow">
                         <div class="flex flex-col flex-grow space-y-2">
                             <div class="text-xl font-medium title sm:text-2xl"><?= $recipe["name"] ?? "{no title}" ?></div>
-                            <div class="description"><?= $recipe["description" ?? ""] ?></div>
+                            <div class="whitespace-pre-line"><?= $recipe["description" ?? ""] ?></div>
                             <div class="border border-pink-200 rounded-md w-min">
                                 <table class="table text-left w-min">
                                     <tbody class="divide-y divide-pink-200">
