@@ -9,7 +9,7 @@ INSERT INTO users (username,email,password)
 -- Generate default roles
 
 INSERT INTO roles (name)
-    VALUES ('administrator');
+    VALUES ('administrator'),('editor');
 
 -- Add administrator role to admin
 -- TODO use joins to avoid using id
