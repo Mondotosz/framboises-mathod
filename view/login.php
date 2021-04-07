@@ -10,13 +10,13 @@ function viewLogin()
 
     ob_start();
 ?>
-    <div class="container mx-auto p-5 border border-gray-200 shadow rounded-md">
+    <div class="container p-5 mx-auto border border-gray-200 rounded-md shadow">
         <form class="grid grid-cols-1 gap-4" action="/authentication/login" method="post">
             <label for="iptUsername">Nom d'utilisateur</label>
             <input type="text" name="username" id="iptUsername" placeholder="Username" required>
             <label for="iptPassword">Mot de passe</label>
             <input type="password" name="password" id="iptPassword" required>
-            <button class="mx-auto py-3 px-2 rounded-md bg-pink-300" type="submit">Connexion</button>
+            <button class="px-2 py-3 mx-auto bg-pink-300 rounded-md" type="submit">Connexion</button>
         </form>
     </div>
 <?php

@@ -10,11 +10,11 @@ function componentTable($headers, $rows, $pagination = null, $paginationStatus =
 ?>
     <div class="flex flex-col space-y-2">
         <div class="overflow-x-auto border border-gray-200 shadow-sm sm:rounded-lg">
-            <table class="w-full table table-auto divide-y divide-gray-200">
+            <table class="table w-full divide-y divide-gray-200 table-auto">
                 <thead class="bg-gray-50">
                     <tr>
                         <?php foreach ($headers as $header) { ?>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><?= $header ?></th>
+                            <th scope="col" class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase"><?= $header ?></th>
                         <?php } ?>
                     </tr>
                 </thead>
@@ -29,7 +29,7 @@ function componentTable($headers, $rows, $pagination = null, $paginationStatus =
                 </tbody>
             </table>
         </div>
-        <div class="flex flex-col sm:flex-row justify-between px-2 items-center">
+        <div class="flex flex-col items-center justify-between px-2 sm:flex-row">
             <?= $paginationStatus ?? "" ?>
             <?= $pagination ?? "" ?>
         </div>
