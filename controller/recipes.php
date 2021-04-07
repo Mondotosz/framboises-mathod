@@ -29,16 +29,36 @@ function recipeList($request)
     viewRecipeList($recipes, $pagination);
 }
 
+/**
+ * @brief displays queried recipe
+ * @param int $id representing the recipe id
+ */
 function recipe($id)
 {
     require_once("view/recipe.php");
     require_once("model/recipes.php");
 
+    // Fetch the recipe
     $recipe = getRecipe($id);
+    // If it exists, add its relations
     if (!empty($recipe)) {
+        // format time
+        foreach ($recipe["time"] as $key => $time) {
+            if ($time > strtotime("01:00:00")) {
+                $recipe["time"][$key] = date("H", $time) . "h" . date("i", $time) . "m";
+            } else {
+                $recipe["time"][$key] = (1 * date("i", $time)) . "m";
+            }
+        }
+        // fetch ingredients
         require_once("model/recipes_require_ingredients.php");
         $recipe["ingredients"] = getRecipeIngredients($id);
+        // fetch images
+        $recipe["images"] = getRecipeImages($id);
+        // fetch steps
+        $recipe["steps"] = getRecipeSteps($id);
+        viewRecipe($recipe);
+    } else {
+        header("Location: /lost");
     }
-
-    viewRecipe($recipe);
 }

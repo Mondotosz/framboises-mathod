@@ -76,7 +76,7 @@ function getRecipeList($limit = null, $offset = null)
                 "time" => [
                     "preparation" => strtotime($entry["preparation"], 0),
                     "cooking" => strtotime($entry["cooking"], 0),
-                    "rest" => strtotime($entry["rest"], 0),
+                    "rest" => strtotime($entry["rest"], 0)
                 ],
                 "images" => empty($entry["image"]) ? [] : [$entry["image"]]
             ];
@@ -91,17 +91,53 @@ function getRecipeList($limit = null, $offset = null)
     return $list;
 }
 
+/**
+ * @brief get a recipe with a given id
+ * @param int $id of the recipe
+ * @return array|null recipe array|null on query failure
+ */
 function getRecipe($id)
 {
     require_once("model/dbConnector.php");
     $query = "SELECT * FROM recipes WHERE id = :id";
-    $res = executeQuerySelect($query, createBinds([[":id", $id,PDO::PARAM_INT]]));
+    $res = executeQuerySelect($query, createBinds([[":id", $id, PDO::PARAM_INT]]));
     // only return the first match
     if (empty($res[0])) {
         $res = null;
     } else {
         $res = $res[0];
+        // format time
+        foreach(["preparation","cooking","rest"]as $time){
+            $res["time"][$time] = strtotime($res[$time],0);
+            $res["time"]["total"] += $res["time"][$time];
+        }
     }
+    return $res;
+}
+
+/**
+ * @brief get recipe associated images
+ * @param int $id of the recipe
+ * @return array|null image array|null on query failure
+ */
+function getRecipeImages($id)
+{
+    require_once("model/dbConnector.php");
+    $query = "SELECT id, path FROM images WHERE recipes_id = :id";
+    $res = executeQuerySelect($query, createBinds([[":id", $id, PDO::PARAM_INT]]));
+    return $res;
+}
+
+/**
+ * @brief get recipe associated steps
+ * @param int $id of the recipe
+ * @return array|null steps array|null on query failure
+ */
+function getRecipeSteps($id)
+{
+    require_once("model/dbConnector.php");
+    $query = "SELECT id, number, instruction FROM steps WHERE recipes_id = :id ORDER BY number ASC";
+    $res = executeQuerySelect($query, createBinds([[":id", $id, PDO::PARAM_INT]]));
     return $res;
 }
 
@@ -118,6 +154,12 @@ function countRecipes()
 
 /**
  * @brief adds a recipe to the database
+ * @param string recipe name
+ * @param string recipe description
+ * @param float portions
+ * @param string preparation date("h:m:s",$time)
+ * @param string cooking date("h:m:s",$time)
+ * @param string rest date("h:m:s",$time)
  * @return bool|null success | null on query failure
  */
 function addRecipe($name, $description, $portions, $preparation, $cooking, $rest)
@@ -128,6 +170,6 @@ function addRecipe($name, $description, $portions, $preparation, $cooking, $rest
         "INSERT INTO recipes (name, description, portions, preparation, cooking, rest) 
         VALUES (:name, :description, :portions, :preparation, :cooking, :rest)";
 
-    $res = executeQueryIUD($query, createBinds([[":name", $name], [":description", $description], [":portions", $portions, PDO::PARAM_INT], [":preparation", $preparation], [":cooking", $cooking], [":rest", $rest]]));
+    $res = executeQueryIUD($query, createBinds([[":name", $name], [":description", $description], [":portions", $portions], [":preparation", $preparation], [":cooking", $cooking], [":rest", $rest]]));
     return $res;
 }
