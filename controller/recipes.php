@@ -16,7 +16,7 @@ function recipeList($request)
     // Generate pagination
     $pagination = componentPagination(ceil($rowCount / $amount), $page + 1, $amount, "/recipes");
 
-    $recipes = getRecipeList();
+    $recipes = getRecipeList($amount, $page * $amount);
     foreach ($recipes as $key => $recipe) {
         foreach ($recipe["time"] as $timekey => $time) {
             if ($time > strtotime("01:00:00")) {
@@ -117,6 +117,7 @@ function recipeAdd($request, $files)
                                 $images[$i] = addImage($files["images"]["name"][$i], $files["images"]["tmp_name"][$i]);
                             }
                         }
+                        //TODO use return value
                         print_r($images);
                     }
 
