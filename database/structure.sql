@@ -87,7 +87,7 @@ CREATE TABLE IF NOT EXISTS `framboises`.`recipes` (
   `preparation` TIME NOT NULL,
   `cooking` TIME NOT NULL,
   `rest` TIME NOT NULL,
-  `description` TEXT NOT NULL,
+  `description` TEXT NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `uniqueRecipe` (`name` ASC) VISIBLE
 ) ENGINE = InnoDB;

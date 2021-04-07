@@ -62,3 +62,68 @@ function recipe($id)
         header("Location: /lost");
     }
 }
+
+function recipeAdd($request, $files)
+{
+    // check permissions
+    if (canManageRecipes()) {
+        // check if user sent data
+        if (!empty($request)) {
+            // Check required fields for each insert
+            // Recipe
+            if (!empty($request["name"]) && !empty($request["portions"]) && !empty($request["time"]["preparation"]) && !empty($request["time"]["cooking"]) && !empty($request["time"]["rest"])) {
+                try {
+
+                    // Sanitize/Validate inputs
+                    // Sanitize for xss and verify for empty after sanitization
+                    $name = filter_var($request["name"], FILTER_SANITIZE_STRING);
+                    if (empty($name)) throw new Exception("Name is a required field");
+                    // Portions require float and not null
+                    $portions = filter_var($request["portions"], FILTER_VALIDATE_FLOAT);
+                    if ($portions === false) throw new Exception("Portions expects a float");
+                    // Description only needs xss prevention
+                    $description = filter_var($request["description"], FILTER_SANITIZE_STRING);
+
+                    // translate input to time
+                    $time = [];
+                    foreach ($request["time"] as $key => $element) {
+                        $time[$key] = strtotime($element, 0);
+                        // strict comparison since 0 == false 
+                        if (filter_var($time[$key], FILTER_VALIDATE_INT) === false) {
+                            throw new Exception("Incorrect time format passed for $key");
+                        }
+                        $time[$key] = date("H:i:s",$time[$key]);
+                    }
+
+                    // Check unique constraints
+                    require_once("model/recipes.php");
+                    if (!empty(getRecipeByName($name))) throw new Exception("Recipe name already taken");
+                    // store recipe
+                    if (addRecipe($name, $description, $portions, $time["preparation"], $time["cooking"], $time["rest"])) {
+                        // successfully added recipe
+                    } else {
+                        throw new Exception("Unable to save recipe");
+                    }
+                } catch (Exception $e) {
+                    echo $e->getMessage();
+                }
+            } else {
+                header("Location: /recipes/new?error=required");
+            }
+        } else {
+            // display creation view
+            require_once("view/recipeCreate.php");
+            viewRecipeCreate();
+        }
+    } else {
+        header("Location: /forbidden");
+    }
+}
+
+
+function canManageRecipes()
+{
+    require_once("model/users_possesses_roles.php");
+    $roles = getUserRoles($_SESSION["username"]);
+    return in_array_r("administrator", $roles) | in_array_r("editor", $roles);
+}
