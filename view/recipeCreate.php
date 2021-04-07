@@ -57,9 +57,9 @@ function viewRecipeCreate()
                     <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
                     </svg>
-                    upload image
+                    upload images
                 </div>
-                <input class="absolute inset-y-0 top-0 opacity-0 w-full h-full cursor-pointer" type="file" multiple name="images[]">
+                <input class="absolute inset-y-0 top-0 opacity-0 w-full h-full cursor-pointer" type="file" accept=".jpg, .jpeg, .png .gif .svg" multiple name="images[]">
             </div>
             <button class="rounded-md bg-pink-300 hover:bg-pink-400 px-3 py-2" type="submit">+</button>
         </form>

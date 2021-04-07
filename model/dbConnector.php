@@ -52,6 +52,37 @@ function executeQueryIUD($query, $binds = [])
     return $queryResult;
 }
 
+/**
+ * This function is designed to insert value in database
+ * @param $query
+ * @param array $binds [":queryBind",$value] for sql injection prevention
+ * @return int|null : last inserted id | $statement->execute() return true is the insert was successful
+ */
+function executeQueryInsert($query, $binds = [])
+{
+    $queryResult = null;
+
+    $dbConnexion = openDBConnexion(); //open database connexion
+    if ($dbConnexion != null) {
+        $statement = $dbConnexion->prepare($query); //prepare query
+
+        // bind params for safety
+        foreach ($binds as $bind) {
+            $statement->bindParam($bind["name"], $bind["value"], $bind["type"] ?? PDO::PARAM_STR);
+        }
+
+        $queryResult = $statement->execute(); //execute query
+
+        if ($queryResult) {
+            $queryResult = $dbConnexion->lastInsertId();
+        } else {
+            $queryResult = null;
+        }
+    }
+    $dbConnexion = null; //close database connexion
+    return $queryResult;
+}
+
 // TODO export logins to config file
 /**
  * This function is designed to manage the database connexion. Closing will be not proceeded there. The client is responsible of this.
@@ -117,7 +148,7 @@ function createBinds($arr)
             throw new Exception("Binds expect 2-3 values");
         } else {
             $tmp = createBind($bind[0], $bind[1], isset($bind[2]) ? $bind[2] : PDO::PARAM_STR);
-            array_push($binds,$tmp);
+            array_push($binds, $tmp);
         }
     }
     return $binds;

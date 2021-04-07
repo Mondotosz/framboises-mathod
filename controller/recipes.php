@@ -92,7 +92,7 @@ function recipeAdd($request, $files)
                         if (filter_var($time[$key], FILTER_VALIDATE_INT) === false) {
                             throw new Exception("Incorrect time format passed for $key");
                         }
-                        $time[$key] = date("H:i:s",$time[$key]);
+                        $time[$key] = date("H:i:s", $time[$key]);
                     }
 
                     // Check unique constraints
@@ -104,6 +104,23 @@ function recipeAdd($request, $files)
                     } else {
                         throw new Exception("Unable to save recipe");
                     }
+
+                    // get id for redirect
+                    $recipeID = getRecipeByName($name);
+
+                    if (!empty($files["images"])) {
+                        // save images
+                        require_once("model/images.php");
+                        $images = [];
+                        for ($i = 0; $i < count($files["images"]["error"]); $i++) {
+                            if (!$files["images"]["error"][$i]) {
+                                $images[$i] = addImage($files["images"]["name"][$i], $files["images"]["tmp_name"][$i]);
+                            }
+                        }
+                        print_r($images);
+                    }
+
+                    // TODO images and other
                 } catch (Exception $e) {
                     echo $e->getMessage();
                 }
