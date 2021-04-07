@@ -4,7 +4,12 @@ module.exports = {
   purge: [],
   darkMode: false, // or 'media' or 'class'
   theme: {
-    extend: {},
+    extend: {
+      spacing:{
+        '128':'32rem',
+        '144':'36rem',
+      }
+    },
   },
   variants: {
     extend: {},
@@ -34,7 +39,7 @@ module.exports = {
       opacity: {
         default: "0.4",
         "10":"0.1",
-        "100": "1.0"
+        "100": "1.0",
       }
     })
   ]
