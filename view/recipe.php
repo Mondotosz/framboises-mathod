@@ -11,10 +11,10 @@ function viewRecipe($recipe)
     ob_start();
 ?>
     <div class="p-3 my-2 border shadow-sm bg-pink-50 sm:rounded-md space-y-2">
-        <div class=""><?= $recipe["name"] ?? "{ no name }" ?></div>
+        <div class="text-3xl font-medium"><?= $recipe["name"] ?? "{ no name }" ?></div>
         <div class="flex flex-row justify-between">
             <?php if (!empty($recipe["description"])) { ?>
-                <div class=""><?= $recipe["description"] ?></div>
+                <div class="text-xl whitespace-pre-line"><?= $recipe["description"] ?></div>
             <?php } ?>
             <div class="border border-pink-200 rounded-md w-min">
                 <table class="table text-left w-min">
@@ -57,7 +57,7 @@ function viewRecipe($recipe)
         <?php if (!empty($recipe["images"])) { ?>
             <div data-carousel class="carousel flex flex-row justify-center h-64 sm:h-96 lg:h-144">
                 <div class="relative">
-                    <button data-carousel-previous class="absolute inset-y-0 left-0 w-16">
+                    <button data-carousel-previous class="absolute inset-y-0 left-0 w-16 rounded-l-md focus:outline-none hover:bg-white hover:bg-opacity-10 focus:bg-white focus:bg-opacity-10">
                         <svg class="h-10 w-10 mx-auto text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                         </svg>
@@ -69,7 +69,7 @@ function viewRecipe($recipe)
                     </div>
                 <?php } ?>
                 <div class="relative">
-                    <button data-carousel-next class="absolute inset-y-0 right-0 w-16">
+                    <button data-carousel-next class="absolute inset-y-0 right-0 w-16 rounded-r-md focus:outline-none hover:bg-white hover:bg-opacity-10 focus:bg-white focus:bg-opacity-10">
                         <svg class="h-10 w-10 mx-auto text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                         </svg>
