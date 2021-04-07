@@ -1,10 +1,15 @@
 <?php
 
+/**
+ * @brief fetch every ingredient from a recipe
+ * @param int $recipeID id of the recipe
+ * @return array|null array of ingredients|null on query failure
+ */
 function getRecipeIngredients($recipeID)
 {
     require_once("model/dbConnector.php");
     $query =
-        "SELECT ingredients.id as 'id', ingredients.name as 'name' FROM recipes_requires_ingredients AS join_table
+        "SELECT ingredients.id AS 'id', ingredients.name AS 'name', join_table.amount AS 'amount' FROM recipes_requires_ingredients AS join_table
 	    LEFT OUTER JOIN recipes
 		    ON recipes.id = join_table.recipes_id
 	    LEFT OUTER JOIN ingredients

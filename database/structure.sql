@@ -194,7 +194,6 @@ CREATE TABLE IF NOT EXISTS `framboises`.`recipes_requires_ingredients` (
   `recipes_id` INT NOT NULL,
   `ingredients_id` INT NOT NULL,
   `amount` DECIMAL(6, 2) NOT NULL,
-  `unit` VARCHAR(60) NULL,
   PRIMARY KEY (`recipes_id`, `ingredients_id`),
   INDEX `fk_recipes_has_ingredients_ingredients1_idx` (`ingredients_id` ASC) VISIBLE,
   INDEX `fk_recipes_has_ingredients_recipes1_idx` (`recipes_id` ASC) VISIBLE,
