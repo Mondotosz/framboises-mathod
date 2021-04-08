@@ -10,7 +10,7 @@ function viewRecipe($recipe)
 
     ob_start();
 ?>
-    <div class="p-3 my-2 border shadow-sm bg-pink-50 sm:rounded-md space-y-2">
+    <div class="p-3 my-2 space-y-2 border shadow-sm bg-pink-50 sm:rounded-md">
         <div class="text-3xl font-medium"><?= $recipe["name"] ?? "{ no name }" ?></div>
         <div class="flex flex-row justify-between">
             <?php if (!empty($recipe["description"])) { ?>
@@ -42,7 +42,7 @@ function viewRecipe($recipe)
         <ul class="">
             <?php foreach ($recipe["ingredients"] as $ingredient) { ?>
                 <li>
-                    <svg class="h-4 w-4 text-pink-500 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="inline w-4 h-4 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path fill-rule="evenodd" clip-rule="evenodd" d="M8 6a1 1 0 011.707-.707l6 6a1 1 0 010 1.414l-6 6A1 1 0 018 18V6z" fill="currentColor" />
                     </svg>
                     <span class="font-medium"><?= $ingredient["amount"] ?></span> <?= $ingredient["name"] ?>
@@ -55,22 +55,22 @@ function viewRecipe($recipe)
             <?php } ?>
         </ol>
         <?php if (!empty($recipe["images"])) { ?>
-            <div data-carousel class="carousel flex flex-row justify-center h-64 sm:h-96 lg:h-144">
+            <div data-carousel class="flex flex-row justify-center h-64 carousel sm:h-96 lg:h-144">
                 <div class="relative">
                     <button data-carousel-previous class="absolute inset-y-0 left-0 w-16 rounded-l-md focus:outline-none hover:bg-white hover:bg-opacity-10 focus:bg-white focus:bg-opacity-10">
-                        <svg class="h-10 w-10 mx-auto text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <svg class="w-10 h-10 mx-auto text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                         </svg>
                     </button>
                 </div>
                 <?php foreach ($recipe["images"] as $key => $image) { ?>
                     <div data-carousel-item class=" w-full flex justify-center bg-blend-luminosity bg-black rounded-md <?= (array_key_first($recipe["images"]) == $key) ? "" : " hidden" ?>">
-                        <img class="object-contain rounded-md h-full" src="<?= $image["path"] ?>" alt="image <?= $key ?>">
+                        <img class="object-contain h-full rounded-md" src="<?= $image["path"] ?>" alt="image <?= $key ?>">
                     </div>
                 <?php } ?>
                 <div class="relative">
                     <button data-carousel-next class="absolute inset-y-0 right-0 w-16 rounded-r-md focus:outline-none hover:bg-white hover:bg-opacity-10 focus:bg-white focus:bg-opacity-10">
-                        <svg class="h-10 w-10 mx-auto text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <svg class="w-10 h-10 mx-auto text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                         </svg>
                     </button>

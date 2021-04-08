@@ -99,28 +99,32 @@ function recipeAdd($request, $files)
                     require_once("model/recipes.php");
                     if (!empty(getRecipeByName($name))) throw new Exception("Recipe name already taken");
                     // store recipe
-                    if (addRecipe($name, $description, $portions, $time["preparation"], $time["cooking"], $time["rest"])) {
-                        // successfully added recipe
-                    } else {
+                    $recipeID = addRecipe($name, $description, $portions, $time["preparation"], $time["cooking"], $time["rest"]);
+                    // Check if saving was successful
+                    if ($recipeID === null) {
                         throw new Exception("Unable to save recipe");
                     }
-
-                    // get id for redirect
-                    $recipeID = getRecipeByName($name);
 
                     if (!empty($files["images"])) {
                         // save images
                         require_once("model/images.php");
                         $images = [];
+                        // store image in upload and database
                         for ($i = 0; $i < count($files["images"]["error"]); $i++) {
                             if (!$files["images"]["error"][$i]) {
                                 $images[$i] = addImage($files["images"]["name"][$i], $files["images"]["tmp_name"][$i]);
                             }
                         }
-                        //TODO use return value
-                        print_r($images);
+                        // Check for returned id
+                        foreach ($images as $image) {
+                            if (isset($image)) {
+                                // Link image to recipe
+                                addRecipeImage($recipeID, $image);
+                            }
+                        }
                     }
 
+                    header("Location: /recipes/$recipeID");
                     // TODO images and other
                 } catch (Exception $e) {
                     echo $e->getMessage();

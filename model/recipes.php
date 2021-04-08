@@ -107,8 +107,8 @@ function getRecipe($id)
     } else {
         $res = $res[0];
         // format time
-        foreach(["preparation","cooking","rest"]as $time){
-            $res["time"][$time] = strtotime($res[$time],0);
+        foreach (["preparation", "cooking", "rest"] as $time) {
+            $res["time"][$time] = strtotime($res[$time], 0);
             $res["time"]["total"] += $res["time"][$time];
         }
     }
@@ -151,6 +151,21 @@ function countRecipes()
     return countEntries('recipes');
 }
 
+/**
+ * @brief links an image to a recipe
+ * @param int $recipeID id of the recipe
+ * @param int $imageID id of the image
+ * @return bool|null success | null on query failure
+ */
+function addRecipeImage($recipeID, $imageID)
+{
+    require_once("model/dbConnector.php");
+    $query = "UPDATE images SET recipes_id = :recipeID WHERE id = :imageID";
+
+    $res = executeQueryIUD($query, createBinds([[":recipeID", $recipeID, PDO::PARAM_INT], [":imageID", $imageID, PDO::PARAM_INT]]));
+    return $res;
+}
+
 
 /**
  * @brief adds a recipe to the database
@@ -160,7 +175,7 @@ function countRecipes()
  * @param string preparation date("h:m:s",$time)
  * @param string cooking date("h:m:s",$time)
  * @param string rest date("h:m:s",$time)
- * @return bool|null success | null on query failure
+ * @return int|null inserted id | null on query failure
  */
 function addRecipe($name, $description, $portions, $preparation, $cooking, $rest)
 {
@@ -170,6 +185,6 @@ function addRecipe($name, $description, $portions, $preparation, $cooking, $rest
         "INSERT INTO recipes (name, description, portions, preparation, cooking, rest) 
         VALUES (:name, :description, :portions, :preparation, :cooking, :rest)";
 
-    $res = executeQueryIUD($query, createBinds([[":name", $name], [":description", $description], [":portions", $portions], [":preparation", $preparation], [":cooking", $cooking], [":rest", $rest]]));
+    $res = executeQueryInsert($query, createBinds([[":name", $name], [":description", $description], [":portions", $portions], [":preparation", $preparation], [":cooking", $cooking], [":rest", $rest]]));
     return $res;
 }
