@@ -46,7 +46,7 @@ function getImage($id)
 function addImage($fileName, $tempName)
 {
     // Check file extension validity
-    if (!preg_match("/.*(\.(?:jpeg)|(?:jpg)|(?:png)|(?:gif)|(?:svg))$/", $fileName, $extension)) {
+    if (!preg_match("/.*(\.(?:(?:jpeg)|(?:jpg)|(?:png)|(?:gif)|(?:svg)))$/", $fileName, $extension)) {
         throw new Exception("Invalid filename filename => $fileName");
     }
 
