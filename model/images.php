@@ -62,6 +62,6 @@ function addImage($fileName, $tempName)
     require_once("model/dbConnector.php");
     $query = "INSERT INTO images (path) VALUES (:path)";
 
-    $res = executeQueryInsert($query, createBinds([[":path", $_SERVER["DOCUMENT_ROOT"] . "/public/upload/img/$uniqueId" . $extension[1]]]));
+    $res = executeQueryInsert($query, createBinds([[":path", "/public/upload/img/$uniqueId" . $extension[1]]]));
     return $res;
 }
