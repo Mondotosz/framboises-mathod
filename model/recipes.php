@@ -73,7 +73,7 @@ function getRecipeList($limit = null, $offset = null)
         // Fetch the first image
         $imageQuery = "SELECT path FROM images WHERE recipes_id = :recipeID LIMIT 1";
         $tmp = executeQuerySelect($imageQuery, createBinds([[":recipeID", $recipes[$key]["id"], PDO::PARAM_INT]]));
-        if(isset($tmp[0])){
+        if (isset($tmp[0])) {
             $recipes[$key]["image"] = $tmp[0]["path"];
         }
     }
@@ -97,6 +97,7 @@ function getRecipe($id)
     } else {
         $res = $res[0];
         // format time
+        $res["time"]["total"] = 0;
         foreach (["preparation", "cooking", "rest"] as $time) {
             $res["time"][$time] = strtotime($res[$time], 0);
             $res["time"]["total"] += $res["time"][$time];

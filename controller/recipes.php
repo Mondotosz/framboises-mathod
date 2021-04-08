@@ -19,7 +19,7 @@ function recipeList($request)
     $recipes = getRecipeList($amount, $page * $amount);
     foreach ($recipes as $key => $recipe) {
         foreach ($recipe["time"] as $timeKey => $time) {
-            if ($time > strtotime("01:00:00")) {
+            if ($time >= strtotime("01:00:00",0)) {
                 $recipes[$key]["time"]["$timeKey"] = date("H", $time) . "h" . date("i", $time) . "m";
             } else {
                 $recipes[$key]["time"][$timeKey] = (1 * date("i", $time)) . "m";
@@ -44,7 +44,7 @@ function recipe($id)
     if (!empty($recipe)) {
         // format time
         foreach ($recipe["time"] as $key => $time) {
-            if ($time > strtotime("01:00:00")) {
+            if ($time >= strtotime("01:00:00",0)) {
                 $recipe["time"][$key] = date("H", $time) . "h" . date("i", $time) . "m";
             } else {
                 $recipe["time"][$key] = (1 * date("i", $time)) . "m";
