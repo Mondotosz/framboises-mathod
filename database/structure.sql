@@ -60,7 +60,7 @@ DROP TABLE IF EXISTS `framboises`.`products`;
 CREATE TABLE IF NOT EXISTS `framboises`.`products` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(255) NOT NULL,
-  `price` DECIMAL(3, 2) NOT NULL,
+  `price` DECIMAL(5, 2) NOT NULL,
   `unit` VARCHAR(45) NOT NULL,
   `description` TEXT NOT NULL,
   PRIMARY KEY (`id`),
@@ -83,7 +83,7 @@ DROP TABLE IF EXISTS `framboises`.`recipes`;
 CREATE TABLE IF NOT EXISTS `framboises`.`recipes` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(60) NOT NULL,
-  `portions` DECIMAL(3, 2) NOT NULL,
+  `portions` DECIMAL(5, 2) NOT NULL,
   `preparation` TIME NOT NULL,
   `cooking` TIME NOT NULL,
   `rest` TIME NOT NULL,
