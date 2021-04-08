@@ -41,8 +41,8 @@ function viewRecipeList($recipes, $pagination = null)
                                 </table>
                             </div>
                         </div>
-                        <?php if (!empty($recipe["images"][0])) { ?>
-                            <img class="object-cover w-1/3 rounded-md shadow md:w-1/2" src="<?= $recipe["images"][0] ?>" alt="image de <?= $recipe["name"] ?>">
+                        <?php if (!empty($recipe["image"])) { ?>
+                            <img class="object-cover w-1/3 max-h-128 rounded-md shadow md:w-1/2" src="<?= $recipe["image"] ?>" alt="image de <?= $recipe["name"] ?>">
                         <?php } ?>
                     </a>
                 </div>

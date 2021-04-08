@@ -57,38 +57,29 @@ function getRecipeList($limit = null, $offset = null)
         $bindValue = createBinds([[":limit", $limit, PDO::PARAM_INT]]);
     }
 
-    $query =
-        "SELECT recipes.id, recipes.name, recipes.portions, recipes.preparation, recipes.cooking, recipes.rest, recipes.description, images.path AS 'image' FROM recipes
-	    LEFT JOIN images ON images.recipes_id = recipes.id
-        ORDER BY recipes.id, images.id ASC $limitString;";
+    // Fetch the recipes
+    $query = "SELECT id, name, description, portions, preparation AS 'preparation', cooking AS 'cooking', rest AS 'rest' FROM recipes ORDER BY id ASC $limitString";
 
-    $res = executeQuerySelect($query, $bindValue);
+    $recipes = executeQuerySelect($query, $bindValue);
 
-    // merge images
-    $list = [];
-    foreach ($res as $entry) {
-        if (empty($list[$entry["id"]])) {
-            $list[$entry["id"]] = [
-                "id" => $entry["id"],
-                "name" => $entry["name"],
-                "description" => $entry["description"],
-                "portions" => $entry["portions"],
-                "time" => [
-                    "preparation" => strtotime($entry["preparation"], 0),
-                    "cooking" => strtotime($entry["cooking"], 0),
-                    "rest" => strtotime($entry["rest"], 0)
-                ],
-                "images" => empty($entry["image"]) ? [] : [$entry["image"]]
-            ];
-            $list[$entry["id"]]["time"]["total"] = $list[$entry["id"]]["time"]["preparation"] + $list[$entry["id"]]["time"]["cooking"] + $list[$entry["id"]]["time"]["rest"];
-        } else {
-            if (!empty($entry["image"])) {
-                array_push($list[$entry["id"]]["images"], $entry["image"]);
-            }
+    foreach ($recipes as $key => $recipe) {
+        // Translate sql time string to timestamp
+        $recipes[$key]["time"] = [
+            "preparation" => strtotime($recipe["preparation"], 0),
+            "cooking" => strtotime($recipe["cooking"], 0),
+            "rest" => strtotime($recipe["rest"], 0)
+        ];
+        // Calculate total time
+        $recipes[$key]["time"]["total"] = $recipes[$key]["time"]["preparation"] + $recipes[$key]["time"]["cooking"] + $recipes[$key]["time"]["rest"];
+        // Fetch the first image
+        $imageQuery = "SELECT path FROM images WHERE recipes_id = :recipeID LIMIT 1";
+        $tmp = executeQuerySelect($imageQuery, createBinds([[":recipeID", $recipes[$key]["id"], PDO::PARAM_INT]]));
+        if(isset($tmp[0])){
+            $recipes[$key]["image"] = $tmp[0]["path"];
         }
     }
 
-    return $list;
+    return $recipes;
 }
 
 /**

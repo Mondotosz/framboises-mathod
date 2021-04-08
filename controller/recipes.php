@@ -18,11 +18,11 @@ function recipeList($request)
 
     $recipes = getRecipeList($amount, $page * $amount);
     foreach ($recipes as $key => $recipe) {
-        foreach ($recipe["time"] as $timekey => $time) {
+        foreach ($recipe["time"] as $timeKey => $time) {
             if ($time > strtotime("01:00:00")) {
-                $recipes[$key]["time"]["$timekey"] = date("H", $time) . "h" . date("i", $time) . "m";
+                $recipes[$key]["time"]["$timeKey"] = date("H", $time) . "h" . date("i", $time) . "m";
             } else {
-                $recipes[$key]["time"][$timekey] = (1 * date("i", $time)) . "m";
+                $recipes[$key]["time"][$timeKey] = (1 * date("i", $time)) . "m";
             }
         }
     }
