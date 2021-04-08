@@ -7,7 +7,7 @@ jQuery(() => {
             let table = $("[data-recipe-create=ingredients]")
             let id: number = parseInt(table.attr("data-current-increment"))
             // increment
-            table.attr("data-current-increment", id++)
+            table.attr("data-current-increment", id + 1)
             // get row and initialize events
             let row = $(data.replaceAll(/{{id}}/g, id))
             row.find("[data-recipe-delete=row]").on("click", e => { deleteRow(e.target) })
@@ -20,9 +20,11 @@ jQuery(() => {
             let table = $("[data-recipe-create=steps]")
             let id: number = parseInt(table.attr("data-current-increment"))
             // increment
-            table.attr("data-current-increment", id++)
+            table.attr("data-current-increment", id + 1)
             // get row and initialize events
             let row = $(data.replaceAll(/{{id}}/g, id))
+            // pre-fill number
+            row.find(`[name$=${$.escapeSelector("[number]")}]`).val(id + 1)
             row.find("[data-recipe-delete=row]").on("click", e => { deleteRow(e.target) })
             table.append(row)
         })

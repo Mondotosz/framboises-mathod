@@ -84,10 +84,10 @@ function viewRecipeCreate()
                             <tbody data-recipe-create="ingredients" data-current-increment="1">
                                 <tr>
                                     <td>
-                                        <input class="w-full" type="number" placeholder="0" min="0" max="9999" step="any" name="ingredients[0][amount]">
+                                        <input class="rounded-md border-gray-300 focus:border-pink-300 shadow-sm focus:ring focus:ring-pink-300 focus:ring-opacity-50 w-full" type="number" placeholder="0" min="0" max="9999" step="any" name="ingredients[0][amount]">
                                     </td>
                                     <td>
-                                        <input class="w-full" type="text" placeholder="..." name="ingredients[0][name]">
+                                        <input class="rounded-md border-gray-300 focus:border-pink-300 shadow-sm focus:ring focus:ring-pink-300 focus:ring-opacity-50 w-full" type="text" placeholder="..." name="ingredients[0][name]">
                                     </td>
                                     <td>
                                         <button data-recipe-delete="row" type="button" class="h-full w-full p-1">
@@ -130,10 +130,10 @@ function viewRecipeCreate()
                             <tbody data-recipe-create="steps" data-current-increment="1">
                                 <tr>
                                     <td>
-                                        <input class="w-full" type="number" placeholder="0" min="0" max="9999" name="steps[0][number]">
+                                        <input class="rounded-md border-gray-300 focus:border-pink-300 shadow-sm focus:ring focus:ring-pink-300 focus:ring-opacity-50 w-full" type="number" placeholder="0" min="0" max="9999" name="steps[0][number]" value="1">
                                     </td>
                                     <td>
-                                        <input class="w-full" type="text" placeholder="..." name="steps[0][instruction]">
+                                        <input class="rounded-md border-gray-300 focus:border-pink-300 shadow-sm focus:ring focus:ring-pink-300 focus:ring-opacity-50 w-full" type="text" placeholder="..." name="steps[0][instruction]">
                                     </td>
                                     <td>
                                         <button data-recipe-delete="row" type="button" class="h-full w-full p-1">
