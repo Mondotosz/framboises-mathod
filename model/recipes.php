@@ -43,7 +43,6 @@ function getRecipeByName($name)
     return $res;
 }
 
-//TODO refactor complex query into multiple queries
 function getRecipeList($limit = null, $offset = null)
 {
     require_once("model/dbConnector.php");
