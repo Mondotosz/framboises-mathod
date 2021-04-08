@@ -26,7 +26,7 @@ function recipeList($request)
             }
         }
     }
-    viewRecipeList($recipes, $pagination);
+    viewRecipeList($recipes, $pagination, canManageRecipes());
 }
 
 /**
@@ -57,7 +57,7 @@ function recipe($id)
         $recipe["images"] = getRecipeImages($id);
         // fetch steps
         $recipe["steps"] = getRecipeSteps($id);
-        viewRecipe($recipe);
+        viewRecipe($recipe, canManageRecipes());
     } else {
         header("Location: /lost");
     }

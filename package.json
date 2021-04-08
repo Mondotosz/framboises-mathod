@@ -11,10 +11,12 @@
 		"postcss-cli": "^8.3.1",
 		"tailwind-heropatterns": "^0.0.8",
 		"tailwindcss": "^2.0.4",
+		"tailwindcss-children": "^2.1.0",
 		"typescript": "^4.2.3"
 	},
 	"scripts": {
-		"build": "postcss view/postcss/style.css -o view/css/style.css && npx tsc"
+		"build": "set NODE_ENV=production&&postcss view/postcss/style.css -o view/css/style.css && npx tsc",
+		"dev": "postcss view/postcss/style.css -o view/css/style.css && npx tsc"
 	},
 	"dependencies": {
 		"jquery": "^3.6.0"

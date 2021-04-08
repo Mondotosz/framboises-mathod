@@ -4,12 +4,33 @@
  * @brief recipe view
  * @return void
  */
-function viewRecipe($recipe)
+function viewRecipe($recipe, $canManage)
 {
     $title = $recipe["name"];
 
     ob_start();
 ?>
+    <?php if ($canManage) { ?>
+        <div class="flex flex-col md:flex-row space-x-3 py-2 px-3">
+            <div class="flex-row md:flex-col flex justify-center">
+                <button type="button" class="h-full text-black focus:outline-none hover:text-red-700 focus:text-red-700" data-collapse-control="settings">
+                    <svg class="h-8 stroke-current transition-all transform duration-500 origin-center hover:rotate-90" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                </button>
+            </div>
+            <div data-collapse="settings" class="hidden flex-grow">
+                <div class="flex flex-col justify-center h-full">
+                    <div class="flex flex-col md:flex-row flex-wrap md:children:mx-2 space-y-2 md:space-y-0">
+                        <a href="/recipes/new" class="bg-pink-200 rounded-md px-3 py-1 hover:bg-pink-300 font-medium sm:my-0">Nouvelle recette</a>
+                        <a href="/recipes/edit/<?=$recipe["id"]?>" class="bg-pink-200 rounded-md px-3 py-1 hover:bg-pink-300 font-medium sm:my-0">Modifier cette recette</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <?php } ?>
+
     <div class="p-3 my-2 space-y-2 border shadow-sm bg-pink-50 sm:rounded-md">
         <div class="text-3xl font-medium"><?= $recipe["name"] ?? "{ no name }" ?></div>
         <div class="flex flex-row justify-between">
@@ -79,13 +100,21 @@ function viewRecipe($recipe)
             </div>
         <?php } ?>
     </div>
-<?php
+    <?php
     $content = ob_get_clean();
 
     //Meta tag for nav
     $head = '<meta nav="recipes">';
 
-    $foot = '<script type="module" src="/view/js/carousel.js"></script>';
+    ob_start();
+    ?>
+    <script type="module" src="/view/js/carousel.js"></script>
+    <?php if ($canManage) { ?>
+        <script type="module" src="/view/js/collapse.js"></script>
+    <?php } ?>
+<?php
+
+    $foot = ob_get_clean();
 
     require_once "view/template.php";
     viewTemplate($title, $content, $head, $foot);
