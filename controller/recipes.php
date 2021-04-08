@@ -105,6 +105,7 @@ function recipeAdd($request, $files)
                         throw new Exception("Unable to save recipe");
                     }
 
+                    // Images
                     if (!empty($files["images"])) {
                         // save images
                         require_once("model/images.php");
@@ -124,8 +125,50 @@ function recipeAdd($request, $files)
                         }
                     }
 
+                    // Ingredients
+                    if (isset($request["ingredients"])) {
+                        require_once("model/ingredients.php");
+                        require_once("model/recipes_require_ingredients.php");
+                        foreach ($request["ingredients"] as $ingredient) {
+                            // check content
+                            $iAmount = filter_var($ingredient["amount"], FILTER_VALIDATE_FLOAT);
+                            if ($iAmount === false) continue;
+                            $iName = filter_var($ingredient["name"], FILTER_SANITIZE_STRING);
+                            if (empty($iName)) continue;
+
+                            // Check if it's already in the database
+                            $tmp = getRecipeByName($iName);
+                            if (!empty($tmp)) {
+                                $ingredientID = $tmp["id"];
+                            } else {
+                                // Store ingredient
+                                $ingredientID = addIngredient($iName);
+                            }
+
+                            if (isset($ingredientID)) {
+                                // create relation
+                                associateRecipeIngredient($recipeID, $ingredientID, $iAmount);
+                            }
+                        }
+                    }
+
+                    // Steps
+                    if (isset($request["steps"])) {
+                        require_once("model/steps.php");
+                        foreach ($request["steps"] as $step) {
+                            // check content
+                            $sNumber = filter_var($step["number"], FILTER_VALIDATE_INT);
+                            if ($sNumber === false) continue;
+                            $sInstruction = filter_var($step["instruction"], FILTER_SANITIZE_STRING);
+                            if (empty($sInstruction)) continue;
+
+                            // Store step
+                            $sID = addStep($sNumber, $sInstruction, $recipeID);
+                        }
+                    }
+
+
                     header("Location: /recipes/$recipeID");
-                    // TODO images and other
                 } catch (Exception $e) {
                     echo $e->getMessage();
                 }

@@ -19,3 +19,11 @@ function getRecipeIngredients($recipeID)
     $res = executeQuerySelect($query, createBinds([[":recipeID", $recipeID, PDO::PARAM_INT]]));
     return $res;
 }
+
+function associateRecipeIngredient($recipeID,$ingredientID,$amount){
+    require_once("model/dbConnector.php");
+    $query = "INSERT INTO recipes_requires_ingredients (recipes_id, ingredients_id, amount) VALUES (:recipeID, :ingredientID, :amount)";
+
+    $res = executeQueryInsert($query, createBinds([[":recipeID",$recipeID,PDO::PARAM_INT],[":ingredientID",$ingredientID,PDO::PARAM_INT],[":amount",$amount]]));
+    return $res;
+}
