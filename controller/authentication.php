@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @brief handles login requests
+ * handles login requests
  * @param array $request Expects $_POST with username and password
  * @return void
  */
@@ -47,7 +47,7 @@ function login($request)
 }
 
 /**
- * @brief handles register requests
+ * handles register requests
  * @param array $request Expects $_POST with username, email, password and passwordCheck
  * @return void
  */
@@ -107,7 +107,7 @@ function register($request)
 }
 
 /**
- * @brief destroys user session and redirects to home
+ * destroys user session and redirects to home
  * @return void
  */
 function logout()
@@ -117,7 +117,7 @@ function logout()
 }
 
 /**
- * @brief create an user session
+ * create an user session
  * @param string $username username
  * @return void
  */
@@ -131,7 +131,7 @@ function createSession($username)
 }
 
 /**
- * @brief checks if the user has an username in session
+ * checks if the user has an username in session
  * @return bool
  */
 function isAuthenticated()

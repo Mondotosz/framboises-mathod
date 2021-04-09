@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @brief adds a step to a recipe
+ * adds a step to a recipe
  * @param int $number step number
  * @param string $instruction
  * @param int $recipeID id of the recipe

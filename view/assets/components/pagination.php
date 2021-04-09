@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @brief generates a pagination component
+ * generates a pagination component
  * @param int $maxPage max amount of pages to avoid page change out of bounds
  * @param int $currentPage page number to highlight and center around
  * @param int $amount number of items per page (used for redirection)
@@ -62,7 +62,7 @@ function componentPagination($maxPage, $currentPage, $amount, $url)
 }
 
 /**
- * @brief generate simple component with pagination status
+ * generate simple component with pagination status
  * @param int $limit number of results per page
  * @param int $offset
  * @param int $max total amount of entries

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @brief table of recipes
+ * table of recipes
  * @param array $headers table headers
  * @param array $rows table rows
  * @param string $pagination pagination component

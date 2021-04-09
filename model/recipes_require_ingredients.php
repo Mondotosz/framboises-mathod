@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @brief fetch every ingredient from a recipe
+ * fetch every ingredient from a recipe
  * @param int $recipeID id of the recipe
  * @return array|null array of ingredients|null on query failure
  */
@@ -21,7 +21,7 @@ function getRecipeIngredients($recipeID)
 }
 
 /**
- * @brief links a recipe and an ingredient
+ * links a recipe and an ingredient
  * @param int $recipeID id of the recipe
  * @param int $ingredientID id of the ingredient
  * @param float $amount

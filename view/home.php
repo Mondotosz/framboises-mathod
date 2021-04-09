@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @brief homepage view
+ * homepage view
  * @return void
  */
 function viewHome()

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @brief register view
+ * register view
  * @return void
  */
 function viewRegister()

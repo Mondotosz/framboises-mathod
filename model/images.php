@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @brief gets every image from the database
+ * gets every image from the database
  * @warning limits and anf offset must be >= 0
  * @param int $limit maximum amount of entries returned
  * @param int $offset entries to be skipped
@@ -26,7 +26,7 @@ function getImages($limit = null, $offset = null)
 }
 
 /**
- * @brief gets image with a given id
+ * gets image with a given id
  * @param int $id image id
  * @return array|null array of image (empty if no matches) | null on query fail
  */
@@ -40,7 +40,7 @@ function getImage($id)
 }
 
 /**
- * @brief adds an image to the database
+ * adds an image to the database
  * @return int|null
  */
 function addImage($fileName, $tempName)

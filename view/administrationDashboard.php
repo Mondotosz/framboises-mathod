@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @brief administration dashboard view with nav
+ * administration dashboard view with nav
  * @param string $component html component
  * @param string $nav current nav for highlight
  * @return void

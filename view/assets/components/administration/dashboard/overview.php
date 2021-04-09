@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @brief overview dashboard component
+ * overview dashboard component
  * @TODO create micro components to insert
  * @param array $stats
  * @return string overview dashboard component

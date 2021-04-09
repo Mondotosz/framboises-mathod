@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @brief fetch a list of recipes and render a view with pagination
+ * fetch a list of recipes and render a view with pagination
  * @param array $request with page and amount keys
  * @return void
  */
@@ -31,7 +31,7 @@ function recipeList($request)
 }
 
 /**
- * @brief displays queried recipe
+ * displays queried recipe
  * @param int $id representing the recipe id
  * @return void
  */
@@ -62,7 +62,7 @@ function recipe($id)
 }
 
 /**
- * @brief handles recipe creation with optional ingredients/steps/images
+ * handles recipe creation with optional ingredients/steps/images
  * @param array $request expect $_POST
  * @param array $files expect $_FILES
  * @return void
@@ -144,7 +144,7 @@ function recipeAdd($request,  $files)
 
 
 /**
- * @brief checks if the user has the rights to manage recipes
+ * checks if the user has the rights to manage recipes
  * @return bool
  */
 function canManageRecipes()
@@ -155,7 +155,7 @@ function canManageRecipes()
 }
 
 /**
- * @brief stores images in the database and links to a recipe if successful
+ * stores images in the database and links to a recipe if successful
  * @param int $recipeID
  * @param array array of files (expects reformattedFiles from utils.php)
  * @return void
@@ -182,7 +182,7 @@ function addImagesToRecipe($recipeID,  $files)
 }
 
 /**
- * @brief stores ingredients in the database and associates them to a recipe if successful
+ * stores ingredients in the database and associates them to a recipe if successful
  * @param int $recipeID id of the recipe in the database
  * @param array $ingredients list of ingredients
  * @return void
@@ -215,7 +215,7 @@ function addIngredientsToRecipe($recipeID,  $ingredients)
 }
 
 /**
- * @brief stores steps in the database and assign them to a recipe if successful
+ * stores steps in the database and assign them to a recipe if successful
  * @param int $recipeID id of the recipe
  * @param array $steps steps
  */
@@ -235,7 +235,7 @@ function addStepsToRecipe($recipeID, $steps)
 }
 
 /**
- * @brief transforms timestamp to readable time like 36h25m
+ * transforms timestamp to readable time like 36h25m
  * @param int $time timestamp
  * @return string|null formatted time | null when timestamp is < 0
  */
@@ -256,7 +256,7 @@ function readableTime($time)
 }
 
 /**
- * @brief deletes a recipe
+ * deletes a recipe
  * @param array $request expects $_POST
  * @return void
  */

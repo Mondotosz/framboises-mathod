@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @brief displays the requested administration dashboard view
+ * displays the requested administration dashboard view
  * @param string $panel dashboard panel name
  * @param array $request expect $_POST used for pagination with "page" and "amount" keys
  * @return void
@@ -39,7 +39,7 @@ function dashboard($panel = null, $request = null)
 }
 
 /**
- * @brief checks if the user is an administrator in the database
+ * checks if the user is an administrator in the database
  * @return bool
  */
 function isAdmin()
@@ -49,7 +49,7 @@ function isAdmin()
 }
 
 /**
- * @brief generates a table
+ * generates a table
  * @param string $table table name
  * @param int $page current page
  * @param int $amount number of entries per page

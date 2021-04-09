@@ -139,7 +139,7 @@ function openDBConnexion()
 }
 
 /**
- * @brief count entries in a table
+ * count entries in a table
  * @warning table must have an id column
  * @TODO handle failure
  * @param string $table table name
@@ -153,7 +153,7 @@ function countEntries($table)
 }
 
 /**
- * @brief creates a binds array ["name" => $name, "value" => $value, "type" => $type]
+ * creates a binds array ["name" => $name, "value" => $value, "type" => $type]
  * @param string $name binding name in sql Eg. ":id"
  * @param mixed $value value to be checked and stored
  * @param int $type PDO::PARAM_type datatype in the database, defaults to string
@@ -165,7 +165,7 @@ function createBind($name, $value, $type = PDO::PARAM_STR)
 }
 
 /**
- * @brief creates a 2d array with binds for query execution
+ * creates a 2d array with binds for query execution
  * @param array $arr expected [[":param",value,PDO::PARAM_INT],[":otherParam",otherValue]]
  * @return array 2d array ready for query execution
  */

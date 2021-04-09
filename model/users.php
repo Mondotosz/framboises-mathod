@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @brief gets every users from the database
+ * gets every users from the database
  * @warning limits and anf offset must be >= 0
  * @param int $limit maximum amount of entries returned
  * @param int $offset entries to be skipped
@@ -26,7 +26,7 @@ function getUsers($limit = null, $offset = null)
 }
 
 /**
- * @brief gets user with a given name
+ * gets user with a given name
  * @param string $username username
  * @return array|null array of user | null on query fail/no match
  */
@@ -45,7 +45,7 @@ function getUserByUsername($username)
 }
 
 /**
- * @brief gets user with a given email
+ * gets user with a given email
  * @param string $email email
  * @return array|null array of user | null on query fail/no match
  */
@@ -65,7 +65,7 @@ function getUserByEmail($email)
 }
 
 /**
- * @brief count users in database
+ * count users in database
  * @return int number of entries
  */
 function countUsers()
@@ -75,7 +75,7 @@ function countUsers()
 }
 
 /**
- * @brief adds an user to the database
+ * adds an user to the database
  * @param string $username username
  * @param string $email email
  * @param string $password password

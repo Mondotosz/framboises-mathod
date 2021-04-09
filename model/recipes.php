@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @brief gets every recipe from the database
+ * gets every recipe from the database
  * @warning limits and anf offset must be >= 0
  * @param int $limit maximum amount of entries returned
  * @param int $offset entries to be skipped
@@ -26,7 +26,7 @@ function getRecipes($limit = null, $offset = null)
 }
 
 /**
- * @brief gets recipe with a given name
+ * gets recipe with a given name
  * @param string $name recipe name
  * @return array|null array of recipe | null on query fail/no match
  */
@@ -45,7 +45,7 @@ function getRecipeByName($name)
 }
 
 /**
- * @brief get a list of recipes with a nested array of time containing timestamp
+ * get a list of recipes with a nested array of time containing timestamp
  * @param int $limit max amount of returned results
  * @param int $offset number of results to skip
  * @return array|null
@@ -91,7 +91,7 @@ function getRecipeList($limit = null, $offset = null)
 }
 
 /**
- * @brief get a recipe with a given id
+ * get a recipe with a given id
  * @param int $id of the recipe
  * @return array|null recipe array|null on query failure
  */
@@ -116,7 +116,7 @@ function getRecipe($id)
 }
 
 /**
- * @brief get recipe associated images
+ * get recipe associated images
  * @param int $id of the recipe
  * @return array|null image array|null on query failure
  */
@@ -129,7 +129,7 @@ function getRecipeImages($id)
 }
 
 /**
- * @brief get recipe associated steps
+ * get recipe associated steps
  * @param int $id of the recipe
  * @return array|null steps array|null on query failure
  */
@@ -142,7 +142,7 @@ function getRecipeSteps($id)
 }
 
 /**
- * @brief count recipes in database
+ * count recipes in database
  * @return int number of entries
  */
 function countRecipes()
@@ -152,7 +152,7 @@ function countRecipes()
 }
 
 /**
- * @brief links an image to a recipe
+ * links an image to a recipe
  * @param int $recipeID id of the recipe
  * @param int $imageID id of the image
  * @return bool|null success | null on query failure
@@ -168,7 +168,7 @@ function addRecipeImage($recipeID, $imageID)
 
 
 /**
- * @brief adds a recipe to the database
+ * adds a recipe to the database
  * @param string $name recipe name
  * @param string $description recipe description
  * @param float $portions portions
@@ -190,7 +190,7 @@ function addRecipe($name, $description, $portions, $preparation, $cooking, $rest
 }
 
 /**
- * @brief deletes a recipe
+ * deletes a recipe
  * @param int $id id of the recipe
  * @return int|null affected rows | null on query failure
  */

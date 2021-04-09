@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @brief get an ingredient by its name
+ * get an ingredient by its name
  * @param string $name ingredient name
  * @return array|null array with the first occurrence | null on query failure
  */
@@ -21,7 +21,7 @@ function getIngredientByName(string $name)
 }
 
 /**
- * @brief adds an ingredient
+ * adds an ingredient
  * @param string $name ingredient name
  * @return int|null id of the last insert| null on failure
  */

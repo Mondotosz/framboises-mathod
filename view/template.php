@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @brief template view with navbar and footer
+ * template view with navbar and footer
  * @param string $title title of the page
  * @param string $content placed in main
  * @param string $head placed in header tag

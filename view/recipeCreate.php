@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @brief recipe creation
+ * recipe creation
  * @return void
  */
 function viewRecipeCreate()

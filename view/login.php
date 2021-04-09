@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @brief login view
+ * login view
  * @return void
  */
 function viewLogin()

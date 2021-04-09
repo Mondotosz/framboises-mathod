@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @brief checks recursively if a needle is in an array
+ * checks recursively if a needle is in an array
  * @source https://stackoverflow.com/questions/4128323/in-array-and-multidimensional-array
  * @param mixed $needle what's searched
  * @param array $haystack where it's searched
@@ -19,7 +19,7 @@ function in_array_r(mixed $needle, array $haystack, bool $strict = false)
 }
 
 /**
- * @brief get $_FILES reformatted
+ * get $_FILES reformatted
  * @return array [0=>[["tmp_name"=>"a"],["tmp_name"=>"b"],["tmp_name"=>"c"]]],1=>[["tmp_name"=>"x"],["tmp_name"=>"y"],["tmp_name"=>"z"]]]
  */
 function getFormattedUpload()
@@ -32,7 +32,7 @@ function getFormattedUpload()
 }
 
 /**
- * @brief turns a file array inside out
+ * turns a file array inside out
  * @param array $files ["tmp_name"=>["a","b","c"]] ($_FILES default format)
  * @return array files [["tmp_name"=>"a"],["tmp_name"=>"b"],["tmp_name"=>"c"]]
  */

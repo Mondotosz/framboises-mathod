@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @brief recipe list view
+ * recipe list view
  * @param array $recipes
  * @param string $pagination
  * @param bool $canManage

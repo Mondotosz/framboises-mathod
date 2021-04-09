@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @brief recipe view
+ * recipe view
  * @param array $recipe
  * @param bool $canManage
  * @return void
