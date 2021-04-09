@@ -35,3 +35,21 @@ function associateRecipeIngredient($recipeID, $ingredientID, $amount)
     $res = executeQueryInsert($query, createBinds([[":recipeID", $recipeID, PDO::PARAM_INT], [":ingredientID", $ingredientID, PDO::PARAM_INT], [":amount", $amount]]));
     return $res;
 }
+
+/**
+ * check if a recipe has an ingredient
+ * @param int $recipeID
+ * @param int $ingredientID
+ * @return bool|null
+ */
+function recipeHasIngredient($recipeID, $ingredientID)
+{
+    require_once("model/dbConnector.php");
+    $query = "SELECT * FROM recipes_requires_ingredients WHERE recipes_id = :recipeID AND ingredients_id = :ingredientID LIMIT 1";
+
+    $res = executeQuerySelect($query, createBinds([[":recipeID", $recipeID, PDO::PARAM_INT], [":ingredientID", $ingredientID, PDO::PARAM_INT]]));
+    if (!is_null($res)) {
+        $res = !empty($res);
+    }
+    return $res;
+}

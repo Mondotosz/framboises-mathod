@@ -364,3 +364,66 @@ function recipeEdit($recipeID, $request)
         header("Location: /forbidden");
     }
 }
+
+/**
+ * add an ingredient to a recipe through request
+ * @param int $recipeID
+ * @param array $request expects $_POST
+ * @return void
+ */
+function recipeAddIngredient($recipeID, $request)
+{
+    if (canManageRecipes()) {
+        if (filter_var($recipeID, FILTER_VALIDATE_INT) !== false) {
+            if (empty($request)) {
+                //TODO view for adding an ingredient
+            } else {
+                try {
+                    // check content
+                    $amount = filter_var($request["amount"], FILTER_VALIDATE_FLOAT);
+                    if ($amount === false) throw new Exception("amount must be a float");
+                    $name = filter_var($request["name"], FILTER_SANITIZE_STRING);
+                    if (empty($name)) throw new Exception("name cannot be empty");
+
+                    // Check if it's already in the database
+                    require_once("model/ingredients.php");
+                    $tmp = getIngredientByName($name);
+                    if (!empty($tmp)) {
+                        $ingredientID = $tmp["id"];
+                    } else {
+                        // Store ingredient
+                        $ingredientID = addIngredient($name);
+                    }
+
+                    if (isset($ingredientID)) {
+                        require_once("model/recipes_require_ingredients.php");
+                        if (recipeHasIngredient($recipeID, $ingredientID)) {
+                            throw new Exception("ingredient already in recipe");
+                        } else {
+                            // create relation
+                            associateRecipeIngredient($recipeID, $ingredientID, $amount);
+                        }
+                    } else {
+                        throw new Exception("couldn't find or create ingredient");
+                    }
+
+                    if (@$request["handler"] == "ajax") {
+                        echo json_encode(["response" => "success", "message" => "successfully added ingredient to the recipe"]);
+                    } else {
+                        header("Location: " . $request["redirection"] ?? "/recipes/edit/$recipeID");
+                    }
+                } catch (Exception $e) {
+                    if (@$request["handler"] == "ajax") {
+                        echo json_encode(["response" => "fail", "message" => $e->getMessage()]);
+                    } else {
+                        echo $e->getMessage();
+                    }
+                }
+            }
+        } else {
+            echo "id not an int";
+        }
+    } else {
+        header("Location: /forbidden");
+    }
+}

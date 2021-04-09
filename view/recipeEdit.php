@@ -70,6 +70,7 @@ function viewRecipeEdit($recipe)
                                 <tr>
                                     <th class="font-medium w-1/4">Quantité</th>
                                     <th class="font-medium w-3/4">Nom</th>
+                                    <th class="font-medium">Modifier</th>
                                     <th class="font-medium">Effacer</th>
                                 </tr>
                             </thead>
@@ -81,6 +82,13 @@ function viewRecipeEdit($recipe)
                                         </td>
                                         <td>
                                             <div class="bg-white rounded-r-md px-3 py-2 w-full"><?= $ingredient["name"] ?></div>
+                                        </td>
+                                        <td>
+                                            <button type="button" class="h-full w-full p-1">
+                                                <svg class="h-6 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                                </svg>
+                                            </button>
                                         </td>
                                         <td>
                                             <button data-recipe-delete="row" type="button" class="h-full w-full p-1">
@@ -118,7 +126,8 @@ function viewRecipeEdit($recipe)
                                 <tr>
                                     <th class="font-medium w-1/4">Numéro</th>
                                     <th class="font-medium w-3/4">Instruction</th>
-                                    <th class="font-medium w-3/4">Effacer</th>
+                                    <th class="font-medium">Modifier</th>
+                                    <th class="font-medium">Effacer</th>
                                 </tr>
                             </thead>
                             <tbody data-recipe-create="steps" data-current-increment="<?=count($recipe["steps"])?>">
@@ -129,6 +138,13 @@ function viewRecipeEdit($recipe)
                                         </td>
                                         <td>
                                             <div class="bg-white rounded-r-md px-3 py-2 w-full"><?= $step["instruction"] ?></div>
+                                        </td>
+                                        <td>
+                                            <button type="button" class="h-full w-full p-1">
+                                                <svg class="h-6 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                                </svg>
+                                            </button>
                                         </td>
                                         <td>
                                             <button data-recipe-delete="row" type="button" class="h-full w-full p-1">
@@ -162,6 +178,8 @@ function viewRecipeEdit($recipe)
 <?php
     $foot = ob_get_clean();
 
+    $head = '<meta recipe-id="'.$recipe["id"].'">';
+
     require_once "view/template.php";
-    viewTemplate($title, $content, null, $foot);
+    viewTemplate($title, $content, $head, $foot);
 }
