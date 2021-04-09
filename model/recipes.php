@@ -201,3 +201,24 @@ function deleteRecipe($id)
 
     return executeQueryIUDAffected($query, createBinds([[":id", $id, PDO::PARAM_INT]]));
 }
+
+/**
+ * update a recipe
+ * @param int $id
+ * @param string $name recipe name
+ * @param string $description recipe description
+ * @param float $portions portions
+ * @param string $preparation preparation date("h:m:s",$time)
+ * @param string $cooking cooking date("h:m:s",$time)
+ * @param string $rest rest date("h:m:s",$time)
+ * @return int|null number of affected rows | null on query failure
+ */
+function updateRecipe($id, $name, $description, $portions, $preparation, $cooking, $rest)
+{
+    require_once("model/dbConnector.php");
+    $query = "UPDATE recipes
+                SET name = :name, description = :description, portions = :portions, preparation = :preparation, cooking = :cooking, rest =:rest
+                WHERE id = :id;";
+    $affected = executeQueryIUDAffected($query, createBinds([[":name", $name], [":description", $description], [":portions", $portions], [":preparation", $preparation], [":cooking", $cooking], [":rest", $rest], [":id", $id, PDO::PARAM_INT]]));
+    return $affected;
+}

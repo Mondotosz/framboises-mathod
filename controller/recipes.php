@@ -282,3 +282,85 @@ function recipeDelete($request)
         header("Location: /forbidden");
     }
 }
+
+
+/**
+ * displays recipe edition or edit recipe
+ * @param int $recipeID
+ * @param array $request
+ */
+function recipeEdit($recipeID, $request)
+{
+    if (canManageRecipes()) {
+        // check id
+        if (filter_var($recipeID, FILTER_VALIDATE_INT) !== false) {
+            if (empty($request)) {
+                // view edit page
+                require_once("model/recipes.php");
+                // fetch recipe
+                $recipe = getRecipe($recipeID);
+
+                if (!empty($recipe)) {
+                    require_once("model/recipes_require_ingredients.php");
+                    require_once("view/recipeEdit.php");
+                    // format time for input
+                    foreach ($recipe["time"] as $key => $time) {
+                        $recipe[$key] = date("H:i", $time);
+                    }
+
+                    // fetch images
+                    $recipe["images"] = getRecipeImages($recipeID);
+
+                    // fetch ingredients
+                    $recipe["ingredients"] = getRecipeIngredients($recipeID);
+
+                    // fetch steps
+                    $recipe["steps"] = getRecipeSteps($recipeID);
+
+                    viewRecipeEdit($recipe);
+                } else {
+                    echo "no recipe with this id";
+                }
+            } else {
+                // process edition request
+                try {
+                    // Sanitize/Validate inputs
+                    // Sanitize for xss and verify for empty after sanitization
+                    $name = filter_var($request["name"], FILTER_SANITIZE_STRING);
+                    if (empty($name)) throw new Exception("Name is a required field");
+                    // Portions require float and not null
+                    $portions = filter_var($request["portions"], FILTER_VALIDATE_FLOAT);
+                    if ($portions === false) throw new Exception("Portions expects a float");
+                    // Description only needs xss prevention
+                    $description = filter_var($request["description"], FILTER_SANITIZE_STRING);
+
+                    // translate input to time
+                    $time = [];
+                    foreach ($request["time"] as $key => $element) {
+                        $time[$key] = strtotime($element, 0);
+                        // strict comparison since 0 == false 
+                        if (filter_var($time[$key], FILTER_VALIDATE_INT) === false) {
+                            throw new Exception("Incorrect time format passed for $key");
+                        }
+                        $time[$key] = date("H:i:s", $time[$key]);
+                    }
+
+                    // update
+                    require_once("model/recipes.php");
+                    $rows = updateRecipe($recipeID, $name, $description, $portions, $time["preparation"], $time["cooking"], $time["rest"]);
+                    if (!is_null($rows) && $rows > 0) {
+                        header("Location: /recipes/$recipeID");
+                    } else {
+                        header("Location: /recipes/edit/$recipeID");
+                    }
+                } catch (Exception $e) {
+                    echo $e->getMessage();
+                }
+            }
+        } else {
+            echo "provided id isn't an int";
+        }
+    } else {
+        header("Location: /forbidden");
+    }
+}
