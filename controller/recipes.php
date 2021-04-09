@@ -254,3 +254,31 @@ function readableTime($time)
 
     return $tmp;
 }
+
+/**
+ * @brief deletes a recipe
+ * @param array $request expects $_POST
+ * @return void
+ */
+function recipeDelete($request)
+{
+    // checks for permissions
+    if (canManageRecipes()) {
+        if (filter_var(@$request["id"], FILTER_VALIDATE_INT) !== false && filter_var(@$request["confirmation"], FILTER_VALIDATE_BOOL)) {
+            // delete recipe
+            require_once("model/recipes.php");
+            $rows = deleteRecipe($request["id"]);
+
+            // redirects based on result
+            if (!is_null($rows) && $rows > 0) {
+                header("Location: " . $request["redirection"] ?? "/");
+            } else {
+                header("Location: " . $request["origin"] ?? "/");
+            }
+        } else {
+            echo "request doesn't have an id or confirmation";
+        }
+    } else {
+        header("Location: /forbidden");
+    }
+}

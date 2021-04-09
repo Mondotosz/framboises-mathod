@@ -32,6 +32,9 @@ switch ($uri) {
     case '/recipes/new':
         recipeAdd($_POST, $_FILES);
         break;
+    case '/recipes/delete':
+        recipeDelete($_POST);
+        break;
     case '/authentication/login':
         login($_POST);
         break;

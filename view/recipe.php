@@ -24,9 +24,16 @@ function viewRecipe($recipe, $canManage)
             </div>
             <div data-collapse="settings" class="hidden flex-grow">
                 <div class="flex flex-col justify-center h-full">
-                    <div class="flex flex-col md:flex-row flex-wrap md:children:mx-2 space-y-2 md:space-y-0">
+                    <div class="flex flex-col md:flex-row flex-wrap md:children:mx-2 space-y-2 md:space-y-0 text-center">
                         <a href="/recipes/new" class="bg-pink-200 rounded-md px-3 py-1 hover:bg-pink-300 font-medium sm:my-0">Nouvelle recette</a>
-                        <a href="/recipes/edit/<?=$recipe["id"]?>" class="bg-pink-200 rounded-md px-3 py-1 hover:bg-pink-300 font-medium sm:my-0">Modifier cette recette</a>
+                        <a href="/recipes/edit/<?= $recipe["id"] ?>" class="bg-pink-200 rounded-md px-3 py-1 hover:bg-pink-300 font-medium sm:my-0">Modifier cette recette</a>
+                        <form method="POST" action="/recipes/delete">
+                            <button class="bg-pink-200 rounded-md px-3 py-1 w-full hover:bg-pink-300 font-medium sm:my-0">Effacer cette recette</button>
+                            <input type="hidden" name="id" value="<?= $recipe["id"] ?>">
+                            <input type="hidden" name="confirmation" value="true">
+                            <input type="hidden" name="redirection" value="/recipes">
+                            <input type="hidden" name="origin" value="/recipes/<?= $recipe["id"] ?>">
+                        </form>
                     </div>
                 </div>
             </div>

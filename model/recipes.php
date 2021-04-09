@@ -188,3 +188,16 @@ function addRecipe($name, $description, $portions, $preparation, $cooking, $rest
     $res = executeQueryInsert($query, createBinds([[":name", $name], [":description", $description], [":portions", $portions], [":preparation", $preparation], [":cooking", $cooking], [":rest", $rest]]));
     return $res;
 }
+
+/**
+ * @brief deletes a recipe
+ * @param int $id id of the recipe
+ * @return int|null affected rows | null on query failure
+ */
+function deleteRecipe($id)
+{
+    require_once("model/dbConnector.php");
+    $query = "DELETE FROM recipes WHERE id = :id";
+
+    return executeQueryIUDAffected($query, createBinds([[":id", $id, PDO::PARAM_INT]]));
+}

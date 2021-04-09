@@ -53,6 +53,35 @@ function executeQueryIUD($query, $binds = [])
 }
 
 /**
+ * This this function executes a query and returns the number of affected rows
+ * @param string $query
+ * @param array $binds [":queryBind",$value] for sql injection prevention
+ * @return int|null : number of rows affected | null on query failure
+ */
+function executeQueryIUDAffected($query, $binds = [])
+{
+    $queryResult = null;
+    $affectedRows = null;
+    $dbConnexion = openDBConnexion(); //open database connexion
+    if ($dbConnexion != null) {
+        $statement = $dbConnexion->prepare($query); //prepare query
+
+        // bind params for safety
+        foreach ($binds as $bind) {
+            $statement->bindParam($bind["name"], $bind["value"], $bind["type"] ?? PDO::PARAM_STR);
+        }
+
+        $queryResult = $statement->execute(); //execute query
+        if ($queryResult) {
+            $affectedRows = $statement->rowCount();
+        }
+    }
+    $dbConnexion = null; //close database connexion
+    return $affectedRows;
+}
+
+
+/**
  * This function is designed to insert value in database
  * @param string $query
  * @param array $binds [":queryBind",$value] for sql injection prevention
