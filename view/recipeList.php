@@ -2,6 +2,9 @@
 
 /**
  * @brief recipe list view
+ * @param array $recipes
+ * @param string $pagination
+ * @param bool $canManage
  * @return void
  */
 function viewRecipeList($recipes, $pagination = null, $canManage)

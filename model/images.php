@@ -27,7 +27,7 @@ function getImages($limit = null, $offset = null)
 
 /**
  * @brief gets image with a given id
- * @param int image id
+ * @param int $id image id
  * @return array|null array of image (empty if no matches) | null on query fail
  */
 function getImage($id)

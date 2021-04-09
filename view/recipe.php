@@ -2,6 +2,8 @@
 
 /**
  * @brief recipe view
+ * @param array $recipe
+ * @param bool $canManage
  * @return void
  */
 function viewRecipe($recipe, $canManage)

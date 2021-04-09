@@ -2,7 +2,8 @@
 
 /**
  * @brief displays the requested administration dashboard view
- * @param string dashboard panel name
+ * @param string $panel dashboard panel name
+ * @param array $request expect $_POST used for pagination with "page" and "amount" keys
  * @return void
  */
 function dashboard($panel = null, $request = null)
@@ -47,6 +48,13 @@ function isAdmin()
     return hasRole($_SESSION["username"], "administrator");
 }
 
+/**
+ * @brief generates a table
+ * @param string $table table name
+ * @param int $page current page
+ * @param int $amount number of entries per page
+ * @return string table component with injected values
+ */
 function table($table, $page, $amount)
 {
     require_once("view/assets/components/table.php");

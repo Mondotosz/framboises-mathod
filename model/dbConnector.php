@@ -3,8 +3,8 @@
 
 /**
  * This function is designed to execute a query received as parameter
- * @param $query : must be correctly build for sql (synthaxis) but the protection against sql injection will be done there
- * @param array $params [":queryBind",$value] for sql injection prevention
+ * @param string $query : must be correctly build for sql (synthaxis) but the protection against sql injection will be done there
+ * @param array $binds [":queryBind",$value] for sql injection prevention
  * @return array|null : get the query result (can be null)
  */
 function executeQuerySelect($query, $binds = [])
@@ -29,7 +29,7 @@ function executeQuerySelect($query, $binds = [])
 
 /**
  * This function is designed to insert value in database
- * @param $query
+ * @param string $query
  * @param array $binds [":queryBind",$value] for sql injection prevention
  * @return bool|null : $statement->execute() return true is the insert was successful
  */
@@ -54,7 +54,7 @@ function executeQueryIUD($query, $binds = [])
 
 /**
  * This function is designed to insert value in database
- * @param $query
+ * @param string $query
  * @param array $binds [":queryBind",$value] for sql injection prevention
  * @return int|null : last inserted id | $statement->execute() return true is the insert was successful
  */
@@ -113,7 +113,7 @@ function openDBConnexion()
  * @brief count entries in a table
  * @warning table must have an id column
  * @TODO handle failure
- * @param string table name
+ * @param string $table table name
  */
 function countEntries($table)
 {
@@ -125,9 +125,9 @@ function countEntries($table)
 
 /**
  * @brief creates a binds array ["name" => $name, "value" => $value, "type" => $type]
- * @param string binding name in sql Eg. ":id"
- * @param mixed value to be checked and stored
- * @param int PDO::PARAM_type datatype in the database, defaults to string
+ * @param string $name binding name in sql Eg. ":id"
+ * @param mixed $value value to be checked and stored
+ * @param int $type PDO::PARAM_type datatype in the database, defaults to string
  * @return array array with key/value pairs to be stored in an array passed to query execution
  */
 function createBind($name, $value, $type = PDO::PARAM_STR)
@@ -137,7 +137,7 @@ function createBind($name, $value, $type = PDO::PARAM_STR)
 
 /**
  * @brief creates a 2d array with binds for query execution
- * @param array expected [[":param",value,PDO::PARAM_INT],[":otherParam",otherValue]]
+ * @param array $arr expected [[":param",value,PDO::PARAM_INT],[":otherParam",otherValue]]
  * @return array 2d array ready for query execution
  */
 function createBinds($arr)

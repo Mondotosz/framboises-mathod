@@ -26,7 +26,7 @@ function getRoles($limit = null, $offset = null)
 
 /**
  * @brief gets roles with a given name
- * @param string role name
+ * @param string $name role name
  * @return array|null array of roles (empty if no matches) | null on query fail
  */
 function getRoleByName($name)
@@ -50,7 +50,7 @@ function countRoles()
 
 /**
  * @brief adds a role to the database
- * @param string role name
+ * @param string $name role name
  * @return bool|null success status | null on query fail
  */
 function addRole($name)

@@ -35,7 +35,7 @@ function recipeList($request)
  * @param int $id representing the recipe id
  * @return void
  */
-function recipe(int $id)
+function recipe($id)
 {
     require_once("view/recipe.php");
     require_once("model/recipes.php");
@@ -67,7 +67,7 @@ function recipe(int $id)
  * @param array $files expect $_FILES
  * @return void
  */
-function recipeAdd(array $request, array $files)
+function recipeAdd($request,  $files)
 {
     // check permissions
     if (canManageRecipes()) {
@@ -160,7 +160,7 @@ function canManageRecipes()
  * @param array array of files (expects reformattedFiles from utils.php)
  * @return void
  */
-function addImagesToRecipe(int $recipeID, array $files)
+function addImagesToRecipe($recipeID,  $files)
 {
     // save images
     require_once("model/images.php");
@@ -187,7 +187,7 @@ function addImagesToRecipe(int $recipeID, array $files)
  * @param array $ingredients list of ingredients
  * @return void
  */
-function addIngredientsToRecipe(int $recipeID, array $ingredients)
+function addIngredientsToRecipe($recipeID,  $ingredients)
 {
     require_once("model/ingredients.php");
     require_once("model/recipes_require_ingredients.php");
@@ -219,7 +219,7 @@ function addIngredientsToRecipe(int $recipeID, array $ingredients)
  * @param int $recipeID id of the recipe
  * @param array $steps steps
  */
-function addStepsToRecipe(int $recipeID, array $steps)
+function addStepsToRecipe($recipeID, $steps)
 {
     require_once("model/steps.php");
     foreach ($steps as $step) {
@@ -239,7 +239,7 @@ function addStepsToRecipe(int $recipeID, array $steps)
  * @param int $time timestamp
  * @return string|null formatted time | null when timestamp is < 0
  */
-function readableTime(int $time)
+function readableTime($time)
 {
     switch (true) {
         case $time >= strtotime("1:00:00", 0):

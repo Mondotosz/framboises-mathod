@@ -3,7 +3,7 @@
 /**
  * @brief overview dashboard component
  * @TODO create micro components to insert
- * @param array
+ * @param array $stats
  * @return string overview dashboard component
  */
 function componentOverview($stats = null)

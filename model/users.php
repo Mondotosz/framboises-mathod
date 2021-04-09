@@ -27,14 +27,14 @@ function getUsers($limit = null, $offset = null)
 
 /**
  * @brief gets user with a given name
- * @param string username
+ * @param string $username username
  * @return array|null array of user | null on query fail/no match
  */
 function getUserByUsername($username)
 {
     require_once("model/dbConnector.php");
     $query = "SELECT * FROM users WHERE username like :username";
-    $res = executeQuerySelect($query, createBinds([[":username",$username]]));
+    $res = executeQuerySelect($query, createBinds([[":username", $username]]));
     // only return the first match
     if (empty($res[0])) {
         $res = null;
@@ -46,7 +46,7 @@ function getUserByUsername($username)
 
 /**
  * @brief gets user with a given email
- * @param string email
+ * @param string $email email
  * @return array|null array of user | null on query fail/no match
  */
 function getUserByEmail($email)
@@ -54,7 +54,7 @@ function getUserByEmail($email)
     require_once("model/dbConnector.php");
     $query = "SELECT * FROM users WHERE email like :email";
 
-    $res = executeQuerySelect($query, createBinds([[":email",$email]]));
+    $res = executeQuerySelect($query, createBinds([[":email", $email]]));
     // only return the first match
     if (empty($res[0])) {
         $res = null;
@@ -76,9 +76,9 @@ function countUsers()
 
 /**
  * @brief adds an user to the database
- * @param string username
- * @param string email
- * @param string password (encrypt password)
+ * @param string $username username
+ * @param string $email email
+ * @param string $password password
  * @return bool|null success | null on query failure
  */
 function addUser($username, $email, $password)
@@ -89,7 +89,7 @@ function addUser($username, $email, $password)
     $query = "INSERT INTO users (username, email, password) VALUES (:username, :email, :password)";
 
 
-    $res = executeQueryIUD($query, createBinds([[":username",$username],[":email",$email],[":password",$password]]));
+    $res = executeQueryIUD($query, createBinds([[":username", $username], [":email", $email], [":password", $password]]));
 
     return $res;
 }

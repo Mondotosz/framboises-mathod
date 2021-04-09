@@ -2,7 +2,7 @@
 
 /**
  * @brief gets all role from a given user
- * @param string username of the user
+ * @param string $username username of the user
  * @return array|null array of roles | null on query failure
  */
 function getUserRoles($username)
@@ -22,7 +22,7 @@ function getUserRoles($username)
 
 /**
  * @brief get all users from a given role
- * @param string role name
+ * @param string $role role name
  * @return array|null array of users | null on query failure
  */
 function getRoleUsers($role)
@@ -42,8 +42,8 @@ function getRoleUsers($role)
 
 /**
  * @brief adds a role to an user
- * @param string username of the target user
- * @param string name of given role
+ * @param string $username username of the target user
+ * @param string $role name of given role
  * @throws Exception "Couldn't find user"
  * @throws Exception "Couldn't find role"
  * @return bool|null success status | null on query failure
@@ -80,8 +80,8 @@ function addRoleToUser($username, $role)
 
 /**
  * @brief check if a given user has a given role
- * @param string username
- * @param string role name
+ * @param string $username username
+ * @param string $role role name
  * @return bool
  */
 function hasRole($username, $role)

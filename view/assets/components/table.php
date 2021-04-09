@@ -2,6 +2,10 @@
 
 /**
  * @brief table of recipes
+ * @param array $headers table headers
+ * @param array $rows table rows
+ * @param string $pagination pagination component
+ * @param string $paginationStatus pagination status component
  * @return string recipes dashboard component
  */
 function componentTable($headers, $rows, $pagination = null, $paginationStatus = null)

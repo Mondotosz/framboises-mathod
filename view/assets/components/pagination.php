@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * @brief generates a pagination component
+ * @param int $maxPage max amount of pages to avoid page change out of bounds
+ * @param int $currentPage page number to highlight and center around
+ * @param int $amount number of items per page (used for redirection)
+ * @param string $url url used for controls redirection
+ * @return string component
+ */
 function componentPagination($maxPage, $currentPage, $amount, $url)
 {
     ob_start();
@@ -53,6 +61,13 @@ function componentPagination($maxPage, $currentPage, $amount, $url)
     return ob_get_clean();
 }
 
+/**
+ * @brief generate simple component with pagination status
+ * @param int $limit number of results per page
+ * @param int $offset
+ * @param int $max total amount of entries
+ * @return string component
+ */
 function componentPaginationStatus($limit, $offset, $max)
 {
     ob_start();

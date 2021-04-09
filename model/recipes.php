@@ -27,6 +27,7 @@ function getRecipes($limit = null, $offset = null)
 
 /**
  * @brief gets recipe with a given name
+ * @param string $name recipe name
  * @return array|null array of recipe | null on query fail/no match
  */
 function getRecipeByName($name)
@@ -43,6 +44,12 @@ function getRecipeByName($name)
     return $res;
 }
 
+/**
+ * @brief get a list of recipes with a nested array of time containing timestamp
+ * @param int $limit max amount of returned results
+ * @param int $offset number of results to skip
+ * @return array|null
+ */
 function getRecipeList($limit = null, $offset = null)
 {
     require_once("model/dbConnector.php");
@@ -61,20 +68,22 @@ function getRecipeList($limit = null, $offset = null)
 
     $recipes = executeQuerySelect($query, $bindValue);
 
-    foreach ($recipes as $key => $recipe) {
-        // Translate sql time string to timestamp
-        $recipes[$key]["time"] = [
-            "preparation" => strtotime($recipe["preparation"], 0),
-            "cooking" => strtotime($recipe["cooking"], 0),
-            "rest" => strtotime($recipe["rest"], 0)
-        ];
-        // Calculate total time
-        $recipes[$key]["time"]["total"] = $recipes[$key]["time"]["preparation"] + $recipes[$key]["time"]["cooking"] + $recipes[$key]["time"]["rest"];
-        // Fetch the first image
-        $imageQuery = "SELECT path FROM images WHERE recipes_id = :recipeID LIMIT 1";
-        $tmp = executeQuerySelect($imageQuery, createBinds([[":recipeID", $recipes[$key]["id"], PDO::PARAM_INT]]));
-        if (isset($tmp[0])) {
-            $recipes[$key]["image"] = $tmp[0]["path"];
+    if (!empty($recipes)) {
+        foreach ($recipes as $key => $recipe) {
+            // Translate sql time string to timestamp
+            $recipes[$key]["time"] = [
+                "preparation" => strtotime($recipe["preparation"], 0),
+                "cooking" => strtotime($recipe["cooking"], 0),
+                "rest" => strtotime($recipe["rest"], 0)
+            ];
+            // Calculate total time
+            $recipes[$key]["time"]["total"] = $recipes[$key]["time"]["preparation"] + $recipes[$key]["time"]["cooking"] + $recipes[$key]["time"]["rest"];
+            // Fetch the first image
+            $imageQuery = "SELECT path FROM images WHERE recipes_id = :recipeID LIMIT 1";
+            $tmp = executeQuerySelect($imageQuery, createBinds([[":recipeID", $recipes[$key]["id"], PDO::PARAM_INT]]));
+            if (isset($tmp[0])) {
+                $recipes[$key]["image"] = $tmp[0]["path"];
+            }
         }
     }
 
@@ -160,12 +169,12 @@ function addRecipeImage($recipeID, $imageID)
 
 /**
  * @brief adds a recipe to the database
- * @param string recipe name
- * @param string recipe description
- * @param float portions
- * @param string preparation date("h:m:s",$time)
- * @param string cooking date("h:m:s",$time)
- * @param string rest date("h:m:s",$time)
+ * @param string $name recipe name
+ * @param string $description recipe description
+ * @param float $portions portions
+ * @param string $preparation preparation date("h:m:s",$time)
+ * @param string $cooking cooking date("h:m:s",$time)
+ * @param string $rest rest date("h:m:s",$time)
  * @return int|null inserted id | null on query failure
  */
 function addRecipe($name, $description, $portions, $preparation, $cooking, $rest)

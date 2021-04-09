@@ -2,7 +2,7 @@
 
 /**
  * @brief handles login requests
- * @param array Expects $_POST with username and password
+ * @param array $request Expects $_POST with username and password
  * @return void
  */
 function login($request)
@@ -48,7 +48,7 @@ function login($request)
 
 /**
  * @brief handles register requests
- * @param array Expects $_POST with username, email, password and passwordCheck
+ * @param array $request Expects $_POST with username, email, password and passwordCheck
  * @return void
  */
 function register($request)
@@ -118,7 +118,7 @@ function logout()
 
 /**
  * @brief create an user session
- * @param string username
+ * @param string $username username
  * @return void
  */
 function createSession($username)
