@@ -21,7 +21,7 @@ function executeQuerySelect($query, $binds = [])
         }
 
         $statement->execute(); //execute query
-        $queryResult = $statement->fetchAll(); //prepare result for client
+        $queryResult = $statement->fetchAll(PDO::FETCH_ASSOC); //prepare result for client
     }
     $dbConnexion = null; //close database connexion
     return $queryResult;
