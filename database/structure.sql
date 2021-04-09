@@ -105,8 +105,8 @@ CREATE TABLE IF NOT EXISTS `framboises`.`images` (
   UNIQUE INDEX `uniqueImage` (`path` ASC) VISIBLE,
   INDEX `fk_images_products1_idx` (`products_id` ASC) VISIBLE,
   INDEX `fk_images_recipes1_idx` (`recipes_id` ASC) VISIBLE,
-  CONSTRAINT `fk_images_products1` FOREIGN KEY (`products_id`) REFERENCES `framboises`.`products` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_images_recipes1` FOREIGN KEY (`recipes_id`) REFERENCES `framboises`.`recipes` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  CONSTRAINT `fk_images_products1` FOREIGN KEY (`products_id`) REFERENCES `framboises`.`products` (`id`) ON DELETE SET NULL ON UPDATE SET NULL,
+  CONSTRAINT `fk_images_recipes1` FOREIGN KEY (`recipes_id`) REFERENCES `framboises`.`recipes` (`id`) ON DELETE SET NULL ON UPDATE SET NULL
 ) ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `framboises`.`steps`
@@ -119,7 +119,7 @@ CREATE TABLE IF NOT EXISTS `framboises`.`steps` (
   `recipes_id` INT NOT NULL,
   PRIMARY KEY (`id`),
   INDEX `fk_steps_recipes1_idx` (`recipes_id` ASC) VISIBLE,
-  CONSTRAINT `fk_steps_recipes1` FOREIGN KEY (`recipes_id`) REFERENCES `framboises`.`recipes` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  CONSTRAINT `fk_steps_recipes1` FOREIGN KEY (`recipes_id`) REFERENCES `framboises`.`recipes` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `framboises`.`ingredients`
@@ -197,8 +197,8 @@ CREATE TABLE IF NOT EXISTS `framboises`.`recipes_requires_ingredients` (
   PRIMARY KEY (`recipes_id`, `ingredients_id`),
   INDEX `fk_recipes_has_ingredients_ingredients1_idx` (`ingredients_id` ASC) VISIBLE,
   INDEX `fk_recipes_has_ingredients_recipes1_idx` (`recipes_id` ASC) VISIBLE,
-  CONSTRAINT `fk_recipes_has_ingredients_recipes1` FOREIGN KEY (`recipes_id`) REFERENCES `framboises`.`recipes` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_recipes_has_ingredients_ingredients1` FOREIGN KEY (`ingredients_id`) REFERENCES `framboises`.`ingredients` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  CONSTRAINT `fk_recipes_has_ingredients_recipes1` FOREIGN KEY (`recipes_id`) REFERENCES `framboises`.`recipes` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_recipes_has_ingredients_ingredients1` FOREIGN KEY (`ingredients_id`) REFERENCES `framboises`.`ingredients` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB;
 SET SQL_MODE = @OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS = @OLD_FOREIGN_KEY_CHECKS;
