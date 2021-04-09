@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * @brief fetch a list of recipes and render a view with pagination
+ * @param array $request with page and amount keys
+ * @return void
+ */
 function recipeList($request)
 {
     require_once("view/recipeList.php");
@@ -19,11 +24,7 @@ function recipeList($request)
     $recipes = getRecipeList($amount, $page * $amount);
     foreach ($recipes as $key => $recipe) {
         foreach ($recipe["time"] as $timeKey => $time) {
-            if ($time >= strtotime("01:00:00",0)) {
-                $recipes[$key]["time"]["$timeKey"] = date("H", $time) . "h" . date("i", $time) . "m";
-            } else {
-                $recipes[$key]["time"][$timeKey] = (1 * date("i", $time)) . "m";
-            }
+            $recipes[$key]["time"][$timeKey] = readableTime($time);
         }
     }
     viewRecipeList($recipes, $pagination, canManageRecipes());
@@ -32,8 +33,9 @@ function recipeList($request)
 /**
  * @brief displays queried recipe
  * @param int $id representing the recipe id
+ * @return void
  */
-function recipe($id)
+function recipe(int $id)
 {
     require_once("view/recipe.php");
     require_once("model/recipes.php");
@@ -44,11 +46,7 @@ function recipe($id)
     if (!empty($recipe)) {
         // format time
         foreach ($recipe["time"] as $key => $time) {
-            if ($time >= strtotime("01:00:00",0)) {
-                $recipe["time"][$key] = date("H", $time) . "h" . date("i", $time) . "m";
-            } else {
-                $recipe["time"][$key] = (1 * date("i", $time)) . "m";
-            }
+            $recipe["time"][$key] = readableTime($time);
         }
         // fetch ingredients
         require_once("model/recipes_require_ingredients.php");
@@ -63,7 +61,13 @@ function recipe($id)
     }
 }
 
-function recipeAdd($request, $files)
+/**
+ * @brief handles recipe creation with optional ingredients/steps/images
+ * @param array $request expect $_POST
+ * @param array $files expect $_FILES
+ * @return void
+ */
+function recipeAdd(array $request, array $files)
 {
     // check permissions
     if (canManageRecipes()) {
@@ -101,70 +105,23 @@ function recipeAdd($request, $files)
                     // store recipe
                     $recipeID = addRecipe($name, $description, $portions, $time["preparation"], $time["cooking"], $time["rest"]);
                     // Check if saving was successful
-                    if ($recipeID === null) {
-                        throw new Exception("Unable to save recipe");
-                    }
+                    if ($recipeID === null) throw new Exception("Unable to save recipe");
 
                     // Images
                     if (!empty($files["images"])) {
                         // save images
-                        require_once("model/images.php");
-                        $images = [];
-                        // store image in upload and database
-                        for ($i = 0; $i < count($files["images"]["error"]); $i++) {
-                            if (!$files["images"]["error"][$i]) {
-                                $images[$i] = addImage($files["images"]["name"][$i], $files["images"]["tmp_name"][$i]);
-                            }
-                        }
-                        // Check for returned id
-                        foreach ($images as $image) {
-                            if (isset($image)) {
-                                // Link image to recipe
-                                addRecipeImage($recipeID, $image);
-                            }
-                        }
+                        require_once("lib/utils.php");
+                        addImagesToRecipe($recipeID, reformatFiles($files["images"]));
                     }
 
                     // Ingredients
                     if (isset($request["ingredients"])) {
-                        require_once("model/ingredients.php");
-                        require_once("model/recipes_require_ingredients.php");
-                        foreach ($request["ingredients"] as $ingredient) {
-                            // check content
-                            $iAmount = filter_var($ingredient["amount"], FILTER_VALIDATE_FLOAT);
-                            if ($iAmount === false) continue;
-                            $iName = filter_var($ingredient["name"], FILTER_SANITIZE_STRING);
-                            if (empty($iName)) continue;
-
-                            // Check if it's already in the database
-                            $tmp = getRecipeByName($iName);
-                            if (!empty($tmp)) {
-                                $ingredientID = $tmp["id"];
-                            } else {
-                                // Store ingredient
-                                $ingredientID = addIngredient($iName);
-                            }
-
-                            if (isset($ingredientID)) {
-                                // create relation
-                                associateRecipeIngredient($recipeID, $ingredientID, $iAmount);
-                            }
-                        }
+                        addIngredientsToRecipe($recipeID, $request["ingredients"]);
                     }
 
                     // Steps
                     if (isset($request["steps"])) {
-                        require_once("model/steps.php");
-                        foreach ($request["steps"] as $step) {
-                            // check content
-                            $sNumber = filter_var($step["number"], FILTER_VALIDATE_INT);
-                            if ($sNumber === false) continue;
-                            $sInstruction = filter_var($step["instruction"], FILTER_SANITIZE_STRING);
-                            if (empty($sInstruction)) continue;
-
-                            // Store step
-                            $sID = addStep($sNumber, $sInstruction, $recipeID);
-                        }
+                        addStepsToRecipe($recipeID, $request["steps"]);
                     }
 
 
@@ -186,9 +143,114 @@ function recipeAdd($request, $files)
 }
 
 
+/**
+ * @brief checks if the user has the rights to manage recipes
+ * @return bool
+ */
 function canManageRecipes()
 {
     require_once("model/users_possesses_roles.php");
     $roles = getUserRoles($_SESSION["username"]);
     return in_array_r("administrator", $roles) | in_array_r("editor", $roles);
+}
+
+/**
+ * @brief stores images in the database and links to a recipe if successful
+ * @param int $recipeID
+ * @param array array of files (expects reformattedFiles from utils.php)
+ * @return void
+ */
+function addImagesToRecipe(int $recipeID, array $files)
+{
+    // save images
+    require_once("model/images.php");
+    $images = [];
+    // store image in upload and database
+    foreach ($files as $file) {
+        if (!$file["error"]) {
+            array_push($images, addImage($file["name"], $file["tmp_name"]));
+        }
+    }
+
+    // Check for returned id
+    foreach ($images as $image) {
+        if (isset($image)) {
+            // Link image to recipe
+            addRecipeImage($recipeID, $image);
+        }
+    }
+}
+
+/**
+ * @brief stores ingredients in the database and associates them to a recipe if successful
+ * @param int $recipeID id of the recipe in the database
+ * @param array $ingredients list of ingredients
+ * @return void
+ */
+function addIngredientsToRecipe(int $recipeID, array $ingredients)
+{
+    require_once("model/ingredients.php");
+    require_once("model/recipes_require_ingredients.php");
+    foreach ($ingredients as $ingredient) {
+        // check content
+        $amount = filter_var($ingredient["amount"], FILTER_VALIDATE_FLOAT);
+        if ($amount === false) continue;
+        $name = filter_var($ingredient["name"], FILTER_SANITIZE_STRING);
+        if (empty($name)) continue;
+
+        // Check if it's already in the database
+        $tmp = getIngredientByName($name);
+        if (!empty($tmp)) {
+            $ingredientID = $tmp["id"];
+        } else {
+            // Store ingredient
+            $ingredientID = addIngredient($name);
+        }
+
+        if (isset($ingredientID)) {
+            // create relation
+            associateRecipeIngredient($recipeID, $ingredientID, $amount);
+        }
+    }
+}
+
+/**
+ * @brief stores steps in the database and assign them to a recipe if successful
+ * @param int $recipeID id of the recipe
+ * @param array $steps steps
+ */
+function addStepsToRecipe(int $recipeID, array $steps)
+{
+    require_once("model/steps.php");
+    foreach ($steps as $step) {
+        // check content
+        $number = filter_var($step["number"], FILTER_VALIDATE_INT);
+        if ($number === false) continue;
+        $instruction = filter_var($step["instruction"], FILTER_SANITIZE_STRING);
+        if (empty($instruction)) continue;
+
+        // Store step
+        addStep($number, $instruction, $recipeID);
+    }
+}
+
+/**
+ * @brief transforms timestamp to readable time like 36h25m
+ * @param int $time timestamp
+ * @return string|null formatted time | null when timestamp is < 0
+ */
+function readableTime(int $time)
+{
+    switch (true) {
+        case $time >= strtotime("1:00:00", 0):
+            $tmp = floor($time / 3600) . "h" . date("i", $time) . "m";
+            break;
+        case $time >= 0:
+            $tmp = date("i", $time) . "m";
+            break;
+        default:
+            $tmp = null;
+    }
+
+    return $tmp;
 }
