@@ -1,5 +1,7 @@
 <?php
 
+// ANCHOR Entry points
+
 /**
  * fetch a list of recipes and render a view with pagination
  * @param array $request with page and amount keys
@@ -142,148 +144,6 @@ function recipeAdd($request,  $files)
     }
 }
 
-
-/**
- * checks if the user has the rights to manage recipes
- * @return bool
- */
-function canManageRecipes()
-{
-    require_once("model/users_possesses_roles.php");
-    $roles = getUserRoles($_SESSION["username"]);
-    return in_array_r("administrator", $roles) | in_array_r("editor", $roles);
-}
-
-/**
- * stores images in the database and links to a recipe if successful
- * @param int $recipeID
- * @param array array of files (expects reformattedFiles from utils.php)
- * @return void
- */
-function addImagesToRecipe($recipeID,  $files)
-{
-    // save images
-    require_once("model/images.php");
-    $images = [];
-    // store image in upload and database
-    foreach ($files as $file) {
-        if (!$file["error"]) {
-            array_push($images, addImage($file["name"], $file["tmp_name"]));
-        }
-    }
-
-    // Check for returned id
-    foreach ($images as $image) {
-        if (isset($image)) {
-            // Link image to recipe
-            addRecipeImage($recipeID, $image);
-        }
-    }
-}
-
-/**
- * stores ingredients in the database and associates them to a recipe if successful
- * @param int $recipeID id of the recipe in the database
- * @param array $ingredients list of ingredients
- * @return void
- */
-function addIngredientsToRecipe($recipeID,  $ingredients)
-{
-    require_once("model/ingredients.php");
-    require_once("model/recipes_require_ingredients.php");
-    foreach ($ingredients as $ingredient) {
-        // check content
-        $amount = filter_var($ingredient["amount"], FILTER_VALIDATE_FLOAT);
-        if ($amount === false) continue;
-        $name = filter_var($ingredient["name"], FILTER_SANITIZE_STRING);
-        if (empty($name)) continue;
-
-        // Check if it's already in the database
-        $tmp = getIngredientByName($name);
-        if (!empty($tmp)) {
-            $ingredientID = $tmp["id"];
-        } else {
-            // Store ingredient
-            $ingredientID = addIngredient($name);
-        }
-
-        if (isset($ingredientID)) {
-            // create relation
-            associateRecipeIngredient($recipeID, $ingredientID, $amount);
-        }
-    }
-}
-
-/**
- * stores steps in the database and assign them to a recipe if successful
- * @param int $recipeID id of the recipe
- * @param array $steps steps
- */
-function addStepsToRecipe($recipeID, $steps)
-{
-    require_once("model/steps.php");
-    foreach ($steps as $step) {
-        // check content
-        $number = filter_var($step["number"], FILTER_VALIDATE_INT);
-        if ($number === false) continue;
-        $instruction = filter_var($step["instruction"], FILTER_SANITIZE_STRING);
-        if (empty($instruction)) continue;
-
-        // Store step
-        addStep($number, $instruction, $recipeID);
-    }
-}
-
-/**
- * transforms timestamp to readable time like 36h25m
- * @param int $time timestamp
- * @return string|null formatted time | null when timestamp is < 0
- */
-function readableTime($time)
-{
-    switch (true) {
-        case $time >= strtotime("1:00:00", 0):
-            $tmp = floor($time / 3600) . "h" . date("i", $time) . "m";
-            break;
-        case $time >= 0:
-            $tmp = date("i", $time) . "m";
-            break;
-        default:
-            $tmp = null;
-    }
-
-    return $tmp;
-}
-
-/**
- * deletes a recipe
- * @param array $request expects $_POST
- * @return void
- */
-function recipeDelete($request)
-{
-    // checks for permissions
-    if (canManageRecipes()) {
-        if (filter_var(@$request["id"], FILTER_VALIDATE_INT) !== false && filter_var(@$request["confirmation"], FILTER_VALIDATE_BOOL)) {
-            // delete recipe
-            require_once("model/recipes.php");
-            $rows = deleteRecipe($request["id"]);
-
-            // redirects based on result
-            if (!is_null($rows) && $rows > 0) {
-                header("Location: " . $request["redirection"] ?? "/");
-            } else {
-                header("Location: " . $request["origin"] ?? "/");
-            }
-        } else {
-            echo "request doesn't have an id or confirmation";
-        }
-    } else {
-        header("Location: /forbidden");
-    }
-}
-
-
 /**
  * displays recipe edition or edit recipe
  * @param int $recipeID
@@ -408,13 +268,13 @@ function recipeAddIngredient($recipeID, $request)
                     }
 
                     if (@$request["handler"] == "ajax") {
-                        echo json_encode(["response" => "success", "message" => "successfully added ingredient to the recipe"]);
+                        echo json_encode(["success" => true, "message" => "successfully added ingredient to the recipe"]);
                     } else {
                         header("Location: " . $request["redirection"] ?? "/recipes/edit/$recipeID");
                     }
                 } catch (Exception $e) {
                     if (@$request["handler"] == "ajax") {
-                        echo json_encode(["response" => "fail", "message" => $e->getMessage()]);
+                        echo json_encode(["success" => false, "message" => $e->getMessage()]);
                     } else {
                         echo $e->getMessage();
                     }
@@ -427,3 +287,227 @@ function recipeAddIngredient($recipeID, $request)
         header("Location: /forbidden");
     }
 }
+
+/**
+ * add a step to the recipe
+ * @param int $recipeID id of the recipe
+ * @param array $request expects $_POST
+ */
+function recipeAddStep($recipeID, $request)
+{
+    if (canManageRecipes()) {
+        if (filter_var($recipeID, FILTER_VALIDATE_INT) !== false) {
+            if (empty($request)) {
+                //TODO
+            } else {
+                try {
+                    addStepToRecipe($recipeID, $request["number"], $request["instruction"]);
+                    if (@$request["handler"] == "ajax") {
+                        echo json_encode(["success" => true, "message" => "successfully added step to the recipe"]);
+                    } else {
+                        header("Location: " . $request["redirection"] ?? "/recipes/edit/$recipeID");
+                    }
+
+                } catch (Exception $e) {
+                    if (@$request["handler"] == "ajax") {
+                        echo json_encode(["response" => "fail", "message" => $e->getMessage()]);
+                    } else {
+                        echo $e->getMessage();
+                    }
+                }
+            }
+        } else {
+            echo "id is not an int";
+        }
+    } else {
+        header("Location: /forbidden");
+    }
+}
+
+
+/**
+ * deletes a recipe
+ * @param array $request expects $_POST
+ * @return void
+ */
+function recipeDelete($request)
+{
+    // checks for permissions
+    if (canManageRecipes()) {
+        if (filter_var(@$request["id"], FILTER_VALIDATE_INT) !== false && filter_var(@$request["confirmation"], FILTER_VALIDATE_BOOL)) {
+            // delete recipe
+            require_once("model/recipes.php");
+            $rows = deleteRecipe($request["id"]);
+
+            // redirects based on result
+            if (!is_null($rows) && $rows > 0) {
+                header("Location: " . $request["redirection"] ?? "/");
+            } else {
+                header("Location: " . $request["origin"] ?? "/");
+            }
+        } else {
+            echo "request doesn't have an id or confirmation";
+        }
+    } else {
+        header("Location: /forbidden");
+    }
+}
+
+// ANCHOR Insert
+
+/**
+ * stores images in the database and links to a recipe if successful
+ * @param int $recipeID
+ * @param array array of files (expects reformattedFiles from utils.php)
+ * @return void
+ */
+function addImagesToRecipe($recipeID,  $files)
+{
+    // save images
+    require_once("model/images.php");
+    $images = [];
+    // store image in upload and database
+    foreach ($files as $file) {
+        if (!$file["error"]) {
+            array_push($images, addImage($file["name"], $file["tmp_name"]));
+        }
+    }
+
+    // Check for returned id
+    foreach ($images as $image) {
+        if (isset($image)) {
+            // Link image to recipe
+            addRecipeImage($recipeID, $image);
+        }
+    }
+}
+
+/**
+ * stores an ingredient in the database and link it to a recipe if successful
+ * @param int $recipeID
+ * @param float $amount
+ * @param string $name
+ */
+function addIngredientToRecipe($recipeID, $amount, $name)
+{
+    // check content
+    $amount = filter_var($amount, FILTER_VALIDATE_FLOAT);
+    if ($amount === false) throw new Exception("amount is not a float");
+    $name = filter_var($name, FILTER_SANITIZE_STRING);
+    if (empty($name)) throw new Exception("empty name");
+
+    // Check if it's already in the database
+    $tmp = getIngredientByName($name);
+    if (!empty($tmp)) {
+        $ingredientID = $tmp["id"];
+    } else {
+        // Store ingredient
+        $ingredientID = addIngredient($name);
+    }
+
+    $res = null;
+
+    if (isset($ingredientID)) {
+        // create relation
+        require_once("model/recipes_require_ingredients.php");
+        $res = associateRecipeIngredient($recipeID, $ingredientID, $amount);
+    }
+
+    return $res;
+}
+
+/**
+ * stores ingredients in the database and associates them to a recipe if successful
+ * @param int $recipeID id of the recipe in the database
+ * @param array $ingredients list of ingredients
+ * @return void
+ */
+function addIngredientsToRecipe($recipeID,  $ingredients)
+{
+    require_once("model/ingredients.php");
+    require_once("model/recipes_require_ingredients.php");
+    foreach ($ingredients as $ingredient) {
+        try {
+            addIngredientToRecipe($recipeID, $ingredient["amount"], $ingredient["name"]);
+        } catch (Exception $e) {
+            continue;
+        }
+    }
+}
+
+/**
+ * stores a step in the database
+ * @param int $recipeID
+ * @param int $number
+ * @param string $instruction
+ * @throws Exception
+ * @return int|null
+ */
+function addStepToRecipe($recipeID, $number, $instruction)
+{
+    // check content
+    $number = filter_var($number, FILTER_VALIDATE_INT);
+    if ($number === false) throw new Exception("step number is not an int");
+    $instruction = filter_var($instruction, FILTER_SANITIZE_STRING);
+    if (empty($instruction)) throw new Exception("empty instruction");
+
+    // Store step
+    require_once("model/steps.php");
+    return addStep($number, $instruction, $recipeID);
+}
+
+/**
+ * stores steps in the database and assign them to a recipe if successful
+ * @param int $recipeID id of the recipe
+ * @param array $steps steps
+ */
+function addStepsToRecipe($recipeID, $steps)
+{
+    require_once("model/steps.php");
+    foreach ($steps as $step) {
+        try {
+            addStepToRecipe($recipeID, $step["number"], $step["instruction"]);
+        } catch (Exception $e) {
+            continue;
+        }
+    }
+}
+
+// ANCHOR update
+
+// ANCHOR Delete
+
+// ANCHOR Helpers
+
+/**
+ * checks if the user has the rights to manage recipes
+ * @return bool
+ */
+function canManageRecipes()
+{
+    require_once("model/users_possesses_roles.php");
+    $roles = getUserRoles($_SESSION["username"]);
+    return in_array_r("administrator", $roles) | in_array_r("editor", $roles);
+}
+
+/**
+ * transforms timestamp to readable time like 36h25m
+ * @param int $time timestamp
+ * @return string|null formatted time | null when timestamp is < 0
+ */
+function readableTime($time)
+{
+    switch (true) {
+        case $time >= strtotime("1:00:00", 0):
+            $tmp = floor($time / 3600) . "h" . date("i", $time) . "m";
+            break;
+        case $time >= 0:
+            $tmp = date("i", $time) . "m";
+            break;
+        default:
+            $tmp = null;
+    }
+
+    return $tmp;
+}
+
