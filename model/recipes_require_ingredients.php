@@ -53,3 +53,16 @@ function recipeHasIngredient($recipeID, $ingredientID)
     }
     return $res;
 }
+
+/**
+ * unlinks a recipe and an ingredient
+ * @param int $recipeID id of the recipe
+ * @param int $ingredientID id of the ingredient
+ * @return int|null affected rows | null on query failure
+ */
+function dissociateRecipeIngredient($recipeID, $ingredientID)
+{
+    require_once("model/dbConnector.php");
+    $query = "DELETE FROM recipes_requires_ingredients WHERE recipes_id = :recipeID AND ingredients_id = :ingredientID";
+    return executeQueryIUDAffected($query, createBinds([[":recipeID", $recipeID, PDO::PARAM_INT], [":ingredientID", $ingredientID, PDO::PARAM_INT]]));
+}

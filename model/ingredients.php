@@ -33,3 +33,10 @@ function addIngredient(string $name)
     $res = executeQueryInsert($query, createBinds([[":name", $name]]));
     return $res;
 }
+
+/**
+ * delete an ingredient
+ */
+function deleteIngredient(){
+
+}

@@ -33,13 +33,19 @@ switch ($uri) {
         recipeAdd($_POST, $_FILES);
         break;
     case preg_match("/^\/recipes\/edit\/(\d+)$/", $uri, $res) ? $uri : null:
-        recipeEdit($res[1],$_POST);
+        recipeEdit($res[1], $_POST);
         break;
     case preg_match("/^\/recipes\/edit\/(\d+)\/add\/ingredient$/", $uri, $res) ? $uri : null:
-        recipeAddIngredient($res[1],$_POST);
+        recipeAddIngredient($res[1], $_POST);
         break;
     case preg_match("/^\/recipes\/edit\/(\d+)\/add\/step$/", $uri, $res) ? $uri : null:
-        recipeAddStep($res[1],$_POST);
+        recipeAddStep($res[1], $_POST);
+        break;
+    case preg_match("/^\/recipes\/edit\/(\d+)\/delete\/ingredient$/", $uri, $res) ? $uri : null:
+        removeIngredientFromRecipe($res[1], $_POST);
+        break;
+    case preg_match("/^\/recipes\/edit\/(\d+)\/delete\/step$/", $uri, $res) ? $uri : null:
+        removeStepFromRecipe($res[1], $_POST);
         break;
     case '/recipes/delete':
         recipeDelete($_POST);

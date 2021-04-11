@@ -307,7 +307,6 @@ function recipeAddStep($recipeID, $request)
                     } else {
                         header("Location: " . $request["redirection"] ?? "/recipes/edit/$recipeID");
                     }
-
                 } catch (Exception $e) {
                     if (@$request["handler"] == "ajax") {
                         echo json_encode(["response" => "fail", "message" => $e->getMessage()]);
@@ -344,6 +343,68 @@ function recipeDelete($request)
                 header("Location: " . $request["redirection"] ?? "/");
             } else {
                 header("Location: " . $request["origin"] ?? "/");
+            }
+        } else {
+            echo "request doesn't have an id or confirmation";
+        }
+    } else {
+        header("Location: /forbidden");
+    }
+}
+
+function removeIngredientFromRecipe($recipeID, $request)
+{
+    // check for permissions
+    if (canManageRecipes()) {
+        if (filter_var($recipeID, FILTER_VALIDATE_INT) !== false && filter_var(@$request["ingredientID"], FILTER_VALIDATE_INT) !== false && filter_var(@$request["confirmation"], FILTER_VALIDATE_BOOL)) {
+            // delete ingredient
+            require_once("model/recipes_require_ingredients.php");
+            $rows = dissociateRecipeIngredient($recipeID, $request["ingredientID"]);
+
+            // response based on result
+            if (!is_null($rows) && $rows > 0) {
+                if ($request["handler"] == "ajax") {
+                    echo json_encode(["success" => true, "id" => $request["ingredientID"]]);
+                } else {
+                    header("Location: " . $request["redirection"] ?? "/");
+                }
+            } else {
+                if ($request["handler"] == "ajax") {
+                    echo json_encode(["success" => false]);
+                } else {
+                    header("Location: " . $request["origin"] ?? "/");
+                }
+            }
+        } else {
+            echo "request doesn't have an id or confirmation";
+        }
+    } else {
+        header("Location: /forbidden");
+    }
+}
+
+function removeStepFromRecipe($recipeID, $request)
+{
+    // check for permissions
+    if (canManageRecipes()) {
+        if (filter_var($recipeID, FILTER_VALIDATE_INT) !== false && filter_var(@$request["stepID"], FILTER_VALIDATE_INT) !== false && filter_var(@$request["confirmation"], FILTER_VALIDATE_BOOL)) {
+            // delete ingredient
+            require_once("model/steps.php");
+            $rows = deleteStep($request["stepID"]);
+
+            // response based on result
+            if (!is_null($rows) && $rows > 0) {
+                if ($request["handler"] == "ajax") {
+                    echo json_encode(["success" => true, "id" => $request["stepID"]]);
+                } else {
+                    header("Location: " . $request["redirection"] ?? "/");
+                }
+            } else {
+                if ($request["handler"] == "ajax") {
+                    echo json_encode(["success" => false]);
+                } else {
+                    header("Location: " . $request["origin"] ?? "/");
+                }
             }
         } else {
             echo "request doesn't have an id or confirmation";
@@ -510,4 +571,3 @@ function readableTime($time)
 
     return $tmp;
 }
-

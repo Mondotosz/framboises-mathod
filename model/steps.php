@@ -15,3 +15,10 @@ function addStep($number, $instruction, $recipeID)
     $res = executeQueryInsert($query, createBinds([[":number", $number, PDO::PARAM_INT], [":instruction", $instruction], [":recipeID", $recipeID, PDO::PARAM_INT]]));
     return $res;
 }
+
+function deleteStep($id)
+{
+    require_once("model/dbConnector.php");
+    $query = "DELETE FROM steps WHERE id = :id";
+    return executeQueryIUDAffected($query, createBinds([[":id", $id, PDO::PARAM_INT]]));
+}
