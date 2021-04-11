@@ -536,6 +536,108 @@ function addStepsToRecipe($recipeID, $steps)
 
 // ANCHOR update
 
+function recipeUpdateIngredient($recipeID, $request)
+{
+    if (canManageRecipes()) {
+        try {
+            // Recipe ID
+            $recipeID = filter_var($recipeID, FILTER_VALIDATE_INT);
+            if ($recipeID === false) throw new Exception("recipe id is not an int");
+            // Ingredient ID
+            $ingredientID = filter_var($request["ingredientID"], FILTER_VALIDATE_INT);
+            if ($ingredientID === false) throw new Exception("step id is not an int");
+
+            $amount = filter_var($request["amount"], FILTER_VALIDATE_FLOAT);
+            if ($amount === false) throw new Exception("amount must be a float");
+
+            $name = filter_var($request["name"], FILTER_SANITIZE_STRING);
+            if (empty($name)) throw new Exception("name cannot be empty");
+
+            require_once("model/recipes_require_ingredients.php");
+            $dbEntry = getRecipeIngredient($recipeID, $ingredientID);
+
+            if (empty($dbEntry)) throw new Exception("no entry for this association");
+
+            // only amount changed
+            if ($dbEntry["amount"] != $amount && $dbEntry["name"] == $name) {
+                updateAmount($recipeID, $ingredientID, $amount);
+            } elseif ($dbEntry["name"] != $name) {
+                // remove old association
+                dissociateRecipeIngredient($recipeID, $ingredientID);
+                // check if ingredient exist
+                require_once("model/ingredients.php");
+                $ingredient = getIngredientByName($name);
+
+                if (empty($ingredient)) {
+                    // create ingredient
+                    $ingredientID = addIngredient($name);
+                }
+
+                // new association
+                associateRecipeIngredient($recipeID, $ingredientID, $amount);
+            }
+
+            if ($request["handler"] == "ajax") {
+                echo json_encode(["success" => true]);
+            } else {
+                header("Location: " . $request["redirection"] ?? "/");
+            }
+        } catch (Exception $e) {
+            if (@$request["handler"] == "ajax") {
+                echo json_encode(["success" => false, "message" => $e->getMessage()]);
+            } else {
+                echo $e->getMessage();
+            }
+        }
+    } else {
+        header("Location: /forbidden");
+    }
+}
+
+function recipeUpdateStep($recipeID, $request)
+{
+    if (canManageRecipes()) {
+        try {
+            // Recipe ID
+            $recipeID = filter_var($recipeID, FILTER_VALIDATE_INT);
+            if ($recipeID === false) throw new Exception("recipe id is not an int");
+            // Step ID
+            $stepID = filter_var($request["stepID"], FILTER_VALIDATE_INT);
+            if ($stepID === false) throw new Exception("step id is not an int");
+            // get step
+            require_once("model/steps.php");
+            $step = getStep($stepID);
+            if (empty($step)) throw new Exception("no such step in database");
+
+            // verify number and instruction
+            $number = filter_var($request["number"], FILTER_VALIDATE_INT);
+            if ($number === false) throw new Exception("number expects an int");
+
+            $instruction = filter_var($request["instruction"], FILTER_SANITIZE_STRING);
+            if (empty($instruction)) throw new Exception("instruction cannot be empty");
+
+            // update entry
+            if ($step["number"] != $number || $step["instruction"] != $instruction) {
+                setStep($stepID, $number, $instruction);
+            }
+
+            if ($request["handler"] == "ajax") {
+                echo json_encode(["success" => true]);
+            } else {
+                header("Location: " . $request["redirection"] ?? "/");
+            }
+        } catch (Exception $e) {
+            if (@$request["handler"] == "ajax") {
+                echo json_encode(["success" => false, "message" => $e->getMessage()]);
+            } else {
+                echo $e->getMessage();
+            }
+        }
+    } else {
+        header("Location: /forbidden");
+    }
+}
+
 // ANCHOR Delete
 
 // ANCHOR Helpers

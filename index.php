@@ -41,6 +41,12 @@ switch ($uri) {
     case preg_match("/^\/recipes\/edit\/(\d+)\/add\/step$/", $uri, $res) ? $uri : null:
         recipeAddStep($res[1], $_POST);
         break;
+    case preg_match("/^\/recipes\/edit\/(\d+)\/update\/ingredient$/", $uri, $res) ? $uri : null:
+        recipeUpdateIngredient($res[1], $_POST);
+        break;
+    case preg_match("/^\/recipes\/edit\/(\d+)\/update\/step$/", $uri, $res) ? $uri : null:
+        recipeUpdateStep($res[1], $_POST);
+        break;
     case preg_match("/^\/recipes\/edit\/(\d+)\/delete\/ingredient$/", $uri, $res) ? $uri : null:
         removeIngredientFromRecipe($res[1], $_POST);
         break;

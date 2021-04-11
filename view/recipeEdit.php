@@ -76,7 +76,7 @@ function viewRecipeEdit($recipe)
                             </thead>
                             <tbody data-recipe-create="ingredients" data-current-increment="1">
                                 <?php foreach ($recipe["ingredients"] as $ingredient) { ?>
-                                    <tr ingredient-id="<?= $ingredient["id"] ?>">
+                                    <tr ingredient-id="<?= $ingredient["id"] ?>" ingredient-name="<?= $ingredient["name"] ?>" ingredient-amount="<?= $ingredient["amount"] ?>">
                                         <td>
                                             <div class="bg-white rounded-l-md px-3 py-2 w-full"><?= $ingredient["amount"] ?></div>
                                         </td>
@@ -84,7 +84,7 @@ function viewRecipeEdit($recipe)
                                             <div class="bg-white rounded-r-md px-3 py-2 w-full"><?= $ingredient["name"] ?></div>
                                         </td>
                                         <td>
-                                            <button data-recipe-edit="ingredient" type="button" class="h-full w-full p-1">
+                                            <button data-recipe-update="ingredient" type="button" class="h-full w-full p-1">
                                                 <svg class="h-6 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
                                                 </svg>
@@ -132,7 +132,7 @@ function viewRecipeEdit($recipe)
                             </thead>
                             <tbody data-recipe-create="steps" data-current-increment="<?= count($recipe["steps"]) ?>">
                                 <?php foreach ($recipe["steps"] as $step) { ?>
-                                    <tr step-id="<?= $step["id"] ?>">
+                                    <tr step-id="<?= $step["id"] ?>" step-number="<?= $step["number"] ?>" step-instruction="<?= $step["instruction"] ?>">
                                         <td>
                                             <div class="bg-white rounded-l-md px-3 py-2 w-full"><?= $step["number"] ?></div>
                                         </td>
@@ -140,7 +140,7 @@ function viewRecipeEdit($recipe)
                                             <div class="bg-white rounded-r-md px-3 py-2 w-full"><?= $step["instruction"] ?></div>
                                         </td>
                                         <td>
-                                            <button data-recipe-edit="step" type="button" class="h-full w-full p-1">
+                                            <button data-recipe-update="step" type="button" class="h-full w-full p-1">
                                                 <svg class="h-6 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
                                                 </svg>

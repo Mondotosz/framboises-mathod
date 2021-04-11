@@ -1,8 +1,8 @@
 <div modal class="fixed inset-0 z-10 flex flex-col justify-center overflow-y-auto bg-black bg-opacity-30">
-    <form action="/recipes/edit/{{id}}/add/step" method="POST"
+    <form action="/recipes/edit/{{id}}/update/step" method="POST"
         class="flex flex-col p-3 mx-auto space-y-2 bg-pink-200 lg:max-w-7xl sm:rounded-md">
         <div class="flex flex-row justify-between">
-            <div class="font-medium">Nouvelle étape</div>
+            <div class="font-medium">Modifier une étape</div>
             <svg modal-dismiss class="h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
             </svg>
@@ -10,11 +10,11 @@
         <label for="iptIngredientAmount">Numéro</label>
         <input
             class="w-full border-gray-300 rounded-md shadow-sm focus:border-pink-300 focus:ring focus:ring-pink-300 focus:ring-opacity-50"
-            type="number" id="iptIngredientAmount" placeholder="0" min="0" max="9999" name="number">
+            type="number" id="iptIngredientAmount" placeholder="0" min="0" max="9999" name="number" edit-input="number">
         <label for="iptIngredientName">Instruction</label>
         <input
             class="w-full border-gray-300 rounded-md shadow-sm focus:border-pink-300 focus:ring focus:ring-pink-300 focus:ring-opacity-50"
-            type="text" id="iptIngredientName" placeholder="..." name="instruction">
+            type="text" id="iptIngredientName" placeholder="..." name="instruction" edit-input="instruction">
         <button type="submit" class="w-full px-3 py-2 font-medium bg-pink-300 hover:bg-pink-400">Submit</button>
     </form>
 </div>

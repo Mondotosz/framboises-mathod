@@ -22,3 +22,22 @@ function deleteStep($id)
     $query = "DELETE FROM steps WHERE id = :id";
     return executeQueryIUDAffected($query, createBinds([[":id", $id, PDO::PARAM_INT]]));
 }
+
+function getStep($id)
+{
+    require_once("model/dbConnector.php");
+    $query = "SELECT * FROM steps WHERE id = :id LIMIT 1";
+    $res = executeQuerySelect($query, createBinds([[":id", $id, PDO::PARAM_INT]]));
+    if (empty($res[0])) {
+        $res = null;
+    } else {
+        $res = $res[0];
+    }
+    return $res;
+}
+
+function setStep($id,$number,$instruction){
+    require_once("model/dbConnector.php");
+    $query = "UPDATE steps SET number = :number, instruction = :instruction WHERE id = :id";
+    return executeQueryIUDAffected($query,createBinds([[":number",$number,PDO::PARAM_INT],[":instruction",$instruction],[":id",$id,PDO::PARAM_INT]]));
+}
