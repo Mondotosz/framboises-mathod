@@ -29,3 +29,12 @@ function forbidden()
     require_once("view/forbidden.php");
     viewForbidden();
 }
+
+/**
+ * display location view
+ * @return void
+ */
+function location(){
+    require_once("view/location.php");
+    viewLocation();
+}

@@ -23,6 +23,9 @@ switch ($uri) {
     case '/home':
         home();
         break;
+    case '/location':
+        location();
+        break;
     case '/recipes':
         recipeList($_GET);
         break;

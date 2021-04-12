@@ -4,6 +4,7 @@ module.exports = {
   purge: [
     './view/**/*.php',
     './view/**/*.html',
+    './view/**/*.ts',
   ],
   darkMode: false, // or 'media' or 'class'
   theme: {
