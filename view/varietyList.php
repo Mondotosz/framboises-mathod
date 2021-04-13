@@ -9,7 +9,7 @@
  */
 function viewVarietyList($varieties, $pagination = null, $canManage = false)
 {
-    $title = "recettes";
+    $title = "variétés";
 
     ob_start();
 ?>
