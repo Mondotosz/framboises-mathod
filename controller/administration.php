@@ -9,6 +9,7 @@
 function dashboard($panel = null, $request = null)
 {
     // Verify authorizations
+    require_once("controller/permissions.php");
     if (isAdmin()) {
         require_once("view/assets/components/pagination.php");
 
@@ -36,16 +37,6 @@ function dashboard($panel = null, $request = null)
     } else {
         header("Location: /forbidden");
     }
-}
-
-/**
- * checks if the user is an administrator in the database
- * @return bool
- */
-function isAdmin()
-{
-    require_once("model/users_possesses_roles.php");
-    return hasRole($_SESSION["username"], "administrator");
 }
 
 /**

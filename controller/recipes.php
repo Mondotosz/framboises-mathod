@@ -12,6 +12,7 @@ function recipeList($request)
     require_once("view/recipeList.php");
     require_once("model/recipes.php");
     require_once("view/assets/components/pagination.php");
+    require_once("controller/permissions.php");
 
     // Filters/default page
     $page = filter_var(@$request["page"], FILTER_VALIDATE_INT, ["options" => ["default" => 1, "min_range" => 1]]) - 1;
@@ -29,7 +30,7 @@ function recipeList($request)
             $recipes[$key]["time"][$timeKey] = readableTime($time);
         }
     }
-    viewRecipeList($recipes, $pagination, canManageRecipes());
+    viewRecipeList($recipes, $pagination, canEdit());
 }
 
 /**
@@ -41,6 +42,7 @@ function recipe($id)
 {
     require_once("view/recipe.php");
     require_once("model/recipes.php");
+    require_once("controller/permissions.php");
 
     // Fetch the recipe
     $recipe = getRecipe($id);
@@ -57,7 +59,7 @@ function recipe($id)
         $recipe["images"] = getRecipeImages($id);
         // fetch steps
         $recipe["steps"] = getRecipeSteps($id);
-        viewRecipe($recipe, canManageRecipes());
+        viewRecipe($recipe, canEdit());
     } else {
         header("Location: /lost");
     }
@@ -71,8 +73,9 @@ function recipe($id)
  */
 function recipeAdd($request,  $files)
 {
+    require_once("controller/permissions.php");
     // check permissions
-    if (canManageRecipes()) {
+    if (canEdit()) {
         // check if user sent data
         if (!empty($request)) {
             // Check required fields for each insert
@@ -151,7 +154,8 @@ function recipeAdd($request,  $files)
  */
 function recipeEdit($recipeID, $request)
 {
-    if (canManageRecipes()) {
+    require_once("controller/permissions.php");
+    if (canEdit()) {
         // check id
         if (filter_var($recipeID, FILTER_VALIDATE_INT) !== false) {
             if (empty($request)) {
@@ -233,7 +237,8 @@ function recipeEdit($recipeID, $request)
  */
 function recipeAddIngredient($recipeID, $request)
 {
-    if (canManageRecipes()) {
+    require_once("controller/permissions.php");
+    if (canEdit()) {
         if (filter_var($recipeID, FILTER_VALIDATE_INT) !== false) {
             if (empty($request)) {
                 //TODO view for adding an ingredient
@@ -295,7 +300,8 @@ function recipeAddIngredient($recipeID, $request)
  */
 function recipeAddStep($recipeID, $request)
 {
-    if (canManageRecipes()) {
+    require_once("controller/permissions.php");
+    if (canEdit()) {
         if (filter_var($recipeID, FILTER_VALIDATE_INT) !== false) {
             if (empty($request)) {
                 //TODO
@@ -331,8 +337,9 @@ function recipeAddStep($recipeID, $request)
  */
 function recipeDelete($request)
 {
+    require_once("controller/permissions.php");
     // checks for permissions
-    if (canManageRecipes()) {
+    if (canEdit()) {
         if (filter_var(@$request["id"], FILTER_VALIDATE_INT) !== false && filter_var(@$request["confirmation"], FILTER_VALIDATE_BOOL)) {
             // delete recipe
             require_once("model/recipes.php");
@@ -354,8 +361,9 @@ function recipeDelete($request)
 
 function removeIngredientFromRecipe($recipeID, $request)
 {
+    require_once("controller/permissions.php");
     // check for permissions
-    if (canManageRecipes()) {
+    if (canEdit()) {
         if (filter_var($recipeID, FILTER_VALIDATE_INT) !== false && filter_var(@$request["ingredientID"], FILTER_VALIDATE_INT) !== false && filter_var(@$request["confirmation"], FILTER_VALIDATE_BOOL)) {
             // delete ingredient
             require_once("model/recipes_require_ingredients.php");
@@ -385,8 +393,9 @@ function removeIngredientFromRecipe($recipeID, $request)
 
 function removeStepFromRecipe($recipeID, $request)
 {
+    require_once("controller/permissions.php");
     // check for permissions
-    if (canManageRecipes()) {
+    if (canEdit()) {
         if (filter_var($recipeID, FILTER_VALIDATE_INT) !== false && filter_var(@$request["stepID"], FILTER_VALIDATE_INT) !== false && filter_var(@$request["confirmation"], FILTER_VALIDATE_BOOL)) {
             // delete ingredient
             require_once("model/steps.php");
@@ -538,7 +547,8 @@ function addStepsToRecipe($recipeID, $steps)
 
 function recipeUpdateIngredient($recipeID, $request)
 {
-    if (canManageRecipes()) {
+    require_once("controller/permissions.php");
+    if (canEdit()) {
         try {
             // Recipe ID
             $recipeID = filter_var($recipeID, FILTER_VALIDATE_INT);
@@ -596,7 +606,8 @@ function recipeUpdateIngredient($recipeID, $request)
 
 function recipeUpdateStep($recipeID, $request)
 {
-    if (canManageRecipes()) {
+    require_once("controller/permissions.php");
+    if (canEdit()) {
         try {
             // Recipe ID
             $recipeID = filter_var($recipeID, FILTER_VALIDATE_INT);
@@ -641,17 +652,6 @@ function recipeUpdateStep($recipeID, $request)
 // ANCHOR Delete
 
 // ANCHOR Helpers
-
-/**
- * checks if the user has the rights to manage recipes
- * @return bool
- */
-function canManageRecipes()
-{
-    require_once("model/users_possesses_roles.php");
-    $roles = getUserRoles($_SESSION["username"]);
-    return in_array_r("administrator", $roles) | in_array_r("editor", $roles);
-}
 
 /**
  * transforms timestamp to readable time like 36h25m
