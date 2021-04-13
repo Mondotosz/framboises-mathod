@@ -7,7 +7,7 @@
  * @param bool $canManage
  * @return void
  */
-function viewRecipeList($recipes, $pagination = null, $canManage)
+function viewRecipeList($recipes, $pagination = null, $canManage=false)
 {
     $title = "recettes";
 

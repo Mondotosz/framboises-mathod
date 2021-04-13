@@ -11,6 +11,8 @@ require_once("controller/static.php");
 require_once("controller/authentication.php");
 require_once("controller/administration.php");
 require_once("controller/recipes.php");
+require_once("controller/products.php");
+require_once("controller/permissions.php");
 
 // Router
 // Remove get parameters
@@ -25,6 +27,9 @@ switch ($uri) {
         break;
     case '/location':
         location();
+        break;
+    case '/varieties':
+        varietyList($_GET);
         break;
     case '/recipes':
         recipeList($_GET);
