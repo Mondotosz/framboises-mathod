@@ -34,7 +34,7 @@ function viewHome()
     <meta property="og:description" content="auto-cueillette de framboise et de petits fruits en juin et juillet">
     <meta property="og:title" content="Framboises Mathod - accueil">
     <meta property="og:url" content="http://<?= $_SERVER['HTTP_HOST'] ?>/home">
-    <meta property="og:image" content="http://<?= $_SERVER['HTTP_HOST'] ?>/view/assets/img/framboises.jpg">
+    <meta property="og:image" itemprop="image" content="http://<?= $_SERVER['HTTP_HOST'] ?>/view/assets/img/framboises.jpg">
     <meta property="og:type" content="website">
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
