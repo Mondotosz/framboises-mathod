@@ -34,11 +34,14 @@ switch ($uri) {
     case '/recipes':
         recipeList($_GET);
         break;
-    case preg_match("/^\/recipes\/(\d+)\/?$/", $uri, $res) ? $uri : null:
-        recipe($res[1]);
+    case '/varieties/new':
+        varietyAdd($_POST, $_FILES);
         break;
     case '/recipes/new':
         recipeAdd($_POST, $_FILES);
+        break;
+    case preg_match("/^\/recipes\/(\d+)\/?$/", $uri, $res) ? $uri : null:
+        recipe($res[1]);
         break;
     case preg_match("/^\/recipes\/edit\/(\d+)$/", $uri, $res) ? $uri : null:
         recipeEdit($res[1], $_POST);

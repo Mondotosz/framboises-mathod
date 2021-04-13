@@ -23,9 +23,31 @@ function varietyList($request)
     $pagination = componentPagination(ceil($rowCount / $amount), $page + 1, $amount, "/varieties");
 
     $products = getProductList($amount, $page * $amount);
-    foreach($products as $key=> $product){
+    foreach ($products as $key => $product) {
         $products[$key]["images"] = getProductImages($product["id"]);
     }
 
     viewVarietyList($products, $pagination, canEdit());
+}
+
+/**
+ * add a variety
+ * @param array $request expects $_POST
+ * @param array $files expect $_FILES
+ * @return void
+ */
+function varietyAdd($request, $files)
+{
+    require_once("controller/permissions.php");
+    if (canEdit()) {
+        if (empty($request)) {
+            // show add variety view
+            require_once("view/varietyCreate.php");
+            viewVarietyCreate();
+        } else {
+            // process request
+        }
+    } else {
+        header("Location: /forbidden");
+    }
 }
