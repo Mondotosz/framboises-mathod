@@ -30,6 +30,18 @@ function getProductList($limit = null, $offset = null)
 }
 
 /**
+ * Select a product by its name
+ * @param string $name
+ * @return array|null
+ */
+function selectProductName($name)
+{
+    require_once("model/dbConnector.php");
+    $query = 'SELECT * FROM products WHERE name LIKE :name LIMIT 1';
+    return executeQuerySelect($query, createBinds([[":name", $name]]))[0] ?? null;
+}
+
+/**
  * get recipe associated images
  * @param int $id of the recipe
  * @return array|null image array|null on query failure
@@ -42,6 +54,34 @@ function getProductImages($id)
 }
 
 // ANCHOR INSERT
+
+/**
+ * Insert a product in the database
+ * @param string $name
+ * @param string $description
+ * @param float $price
+ * @param string $unit
+ * @return int|null
+ */
+function insertProduct($name, $description, $price, $unit)
+{
+    require_once("model/dbConnector.php");
+    $query = 'INSERT INTO products (name, description, price, unit) VALUES (:name, :description, :price, :unit);';
+    return executeQueryInsert($query, createBinds([[":name", $name], [":description", $description], [":price", $price], [":unit", $unit]]));
+}
+
+/**
+ * links a an image to a product
+ * @param int $productID
+ * @param int $imageID
+ * @return int|null
+ */
+function linkProductImage($productID, $imageID)
+{
+    require_once("model/dbConnector.php");
+    $query = "UPDATE images SET products_id = :productID WHERE id = :imageID";
+    return executeQueryInsert($query, createBinds([[":productID", $productID, PDO::PARAM_INT], [":imageID", $imageID, PDO::PARAM_INT]]));
+}
 
 // ANCHOR UPDATE
 
