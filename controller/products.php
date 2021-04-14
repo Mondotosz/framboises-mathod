@@ -31,6 +31,27 @@ function varietyList($request)
 }
 
 /**
+ * displays product
+ * @param int $id
+ * @return void
+ */
+function variety($id)
+{
+    require_once("view/variety.php");
+    require_once("model/products.php");
+    require_once("controller/permissions.php");
+
+    // Fetch product
+    $product = selectProduct($id);
+    if (!empty($product)) {
+        $product["images"] = getProductImages($id);
+        viewProduct($product, canEdit());
+    } else {
+        header("Location: /lost");
+    }
+}
+
+/**
  * add a variety
  * @param array $request expects $_POST
  * @param array $files expect $_FILES

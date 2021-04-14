@@ -30,6 +30,18 @@ function getProductList($limit = null, $offset = null)
 }
 
 /**
+ * Select a product by its id
+ * @param int $id
+ * @return int|null
+ */
+function selectProduct($id)
+{
+    require_once("model/dbConnector.php");
+    $query = 'SELECT * FROM products WHERE id = :id LIMIT 1;';
+    return executeQuerySelect($query, createBinds([[":id", $id, PDO::PARAM_INT]]))[0] ?? null;
+}
+
+/**
  * Select a product by its name
  * @param string $name
  * @return array|null

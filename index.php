@@ -43,6 +43,9 @@ switch ($uri) {
     case preg_match("/^\/recipes\/(\d+)\/?$/", $uri, $res) ? $uri : null:
         recipe($res[1]);
         break;
+    case preg_match("/^\/varieties\/(\d+)\/?$/", $uri, $res) ? $uri : null:
+        variety($res[1]);
+        break;
     case preg_match("/^\/recipes\/edit\/(\d+)$/", $uri, $res) ? $uri : null:
         recipeEdit($res[1], $_POST);
         break;
