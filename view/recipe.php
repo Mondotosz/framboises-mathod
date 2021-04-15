@@ -13,7 +13,7 @@ function viewRecipe($recipe, $canManage)
     ob_start();
 ?>
     <?php if ($canManage) { ?>
-        <div class="flex flex-col md:flex-row space-x-3 py-2 px-3">
+        <div class="flex flex-col md:flex-row md:space-x-3 py-2 px-3">
             <div class="flex-row md:flex-col flex justify-center">
                 <button type="button" class="h-full text-black focus:outline-none hover:text-red-700 focus:text-red-700" data-collapse-control="settings">
                     <svg class="h-8 stroke-current transition-all transform duration-500 origin-center hover:rotate-90" fill="none" viewBox="0 0 24 24" stroke="currentColor">
