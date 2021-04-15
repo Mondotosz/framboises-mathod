@@ -108,6 +108,36 @@ function varietyAdd($request, $files)
 }
 
 
+function productDelete($request)
+{
+    require_once("controller/permissions.php");
+    if (canEdit()) {
+        // process request
+        try {
+            $id = filter_var($request["id"], FILTER_VALIDATE_INT);
+            if ($id === false) throw new Exception("id requires an int value");
+
+            $confirmation = filter_var($request["confirmation"], FILTER_VALIDATE_BOOL);
+            if (!$confirmation) throw new Exception("confirmation wasn't true");
+
+            require_once("model/products.php");
+            $rows = deleteProduct($id);
+
+            // redirects based on result
+            if (!is_null($rows) && $rows > 0) {
+                header("Location: " . $request["redirection"] ?? "/varieties");
+            } else {
+                header("Location: " . $request["origin"] ?? "/varieties/$id");
+            }
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
+    } else {
+        header("Location: /forbidden");
+    }
+}
+
+
 function addImageToProduct($productID, $files)
 {
     // save images

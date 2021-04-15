@@ -99,6 +99,18 @@ function linkProductImage($productID, $imageID)
 
 // ANCHOR DELETE
 
+/**
+ * delete a product
+ * @param int $id
+ * @return int|null
+ */
+function deleteProduct($id){
+    require_once("model/dbConnector.php");
+    $query = 'DELETE FROM products WHERE id = :id;';
+    return executeQueryIUDAffected($query,createBinds([[":id",$id,PDO::PARAM_INT]]));
+
+}
+
 // ANCHOR HELPERS
 
 /**

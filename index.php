@@ -70,6 +70,9 @@ switch ($uri) {
     case '/recipes/delete':
         recipeDelete($_POST);
         break;
+    case '/varieties/delete':
+        productDelete($_POST);
+        break;
     case '/authentication/login':
         login($_POST);
         break;
