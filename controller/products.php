@@ -107,7 +107,70 @@ function varietyAdd($request, $files)
     }
 }
 
+/**
+ * edit variety
+ * @param int $id
+ * @param array $request expects $_POST
+ * @return void
+ */
+function varietyEdit($id, $request)
+{
+    require_once("controller/permissions.php");
+    if (canEdit()) {
+        require_once("model/products.php");
+        if (empty($request)) {
+            $product = selectProduct($id);
+            if (!empty($product)) {
+                require_once("view/varietyEdit.php");
+                viewVarietyEdit($product);
+            } else {
+                header("Location: /lost");
+            }
+        } else {
+            try {
+                $name = filter_var($request["name"], FILTER_SANITIZE_STRING);
+                if (empty($name)) throw new Exception("name cannot be empty");
 
+                $description = filter_var($request["description"], FILTER_SANITIZE_STRING);
+                if (empty($description)) throw new Exception("description cannot be empty");
+
+                $price = filter_var($request["price"], FILTER_VALIDATE_FLOAT);
+                if ($price === false) throw new Exception("price must be a float");
+
+                $unit = filter_var($request["unit"], FILTER_SANITIZE_STRING);
+                if (empty($unit)) throw new Exception("unit cannot be empty");
+
+                // check if the product exists
+                $product = selectProduct($id);
+                if (empty($product)) throw new Exception("no product with this id in the database");
+
+                // check name unique constraint
+                $constraint = selectProductName($name);
+                if (!empty($constraint)) throw new Exception("name already used");
+
+                // update database entry
+                $rows = updateProduct($id, $name, $price, $unit, $description);
+
+                if (!is_null($rows) && $rows > 0) {
+                    header("Location: /varieties/$id");
+                } else {
+                    header("Location: /varieties/edit/$id");
+                }
+            } catch (Exception $e) {
+                echo $e->getMessage();
+            }
+        }
+    } else {
+        header("Location: /forbidden");
+    }
+}
+
+
+/**
+ * deletes a product
+ * @param array $request expects $_POST
+ * @return void
+ */
 function productDelete($request)
 {
     require_once("controller/permissions.php");

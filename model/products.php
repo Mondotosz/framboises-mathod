@@ -97,6 +97,22 @@ function linkProductImage($productID, $imageID)
 
 // ANCHOR UPDATE
 
+/**
+ * update product entry
+ * @param int $id
+ * @param string $name
+ * @param float $price
+ * @param string $unit
+ * @param string $description
+ * @return int|null affected rows
+ */
+function updateProduct($id, $name, $price, $unit, $description)
+{
+    require_once("model/dbConnector.php");
+    $query = 'UPDATE products SET name = :name, price = :price, unit = :unit, description = :description WHERE id = :id;';
+    return executeQueryIUDAffected($query, createBinds([[":name", $name], [":price", $price], [":unit", $unit], [":description", $description], [":id", $id, PDO::PARAM_INT]]));
+}
+
 // ANCHOR DELETE
 
 /**
@@ -104,11 +120,11 @@ function linkProductImage($productID, $imageID)
  * @param int $id
  * @return int|null
  */
-function deleteProduct($id){
+function deleteProduct($id)
+{
     require_once("model/dbConnector.php");
     $query = 'DELETE FROM products WHERE id = :id;';
-    return executeQueryIUDAffected($query,createBinds([[":id",$id,PDO::PARAM_INT]]));
-
+    return executeQueryIUDAffected($query, createBinds([[":id", $id, PDO::PARAM_INT]]));
 }
 
 // ANCHOR HELPERS
