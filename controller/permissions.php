@@ -17,6 +17,6 @@ function isAdmin()
 function canEdit()
 {
     require_once("model/users_possesses_roles.php");
-    $roles = getUserRoles($_SESSION["username"]);
+    $roles = getUserRoles($_SESSION["username"]) ?? [];
     return in_array_r("administrator", $roles) | in_array_r("editor", $roles);
 }

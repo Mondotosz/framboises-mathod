@@ -54,7 +54,7 @@ function viewTemplate($title, $content, $head = null, $foot = null)
                     </button>
                     <div data-dropdown-target="user-menu" class="absolute right-0 hidden w-56 mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg dropdown ring-1 ring-black ring-opacity-5 focus:outline-none">
                         <?php if (isset($_SESSION["username"])) { ?>
-                            <?php if (@in_array_r("administrator", $_SESSION["roles"])) { ?>
+                            <?php if (@in_array_r("administrator", $_SESSION["roles"]??[])) { ?>
                                 <div class="py-2">
                                     <a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" href="/administration/dashboard">dashboard</a>
                                 </div>
