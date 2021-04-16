@@ -96,7 +96,7 @@ function viewOpeningsCalendar($calendar, $canManage = false)
                         <?php } ?>
                         <?php foreach ($calendar["openings"] as $opening) { ?>
                             <?php if (date("j", strtotime($opening["start"])) == $i) { ?>
-                                <div data-opening-description="<?= $opening["description"] ?>" data-opening-places="<?= $opening["places"] ?>" class=" opacity-80 hover:opacity-100 w-full overflow-hidden bg-red-300 rounded-md absolute <?= $timeHeight[date("G", strtotime($opening["end"])) - date("G", strtotime($opening["start"]))] ?> <?= $timeTop[date("G", strtotime($opening["start"]))] ?>">
+                                <div calendar-item data-opening-start="<?= date("H:i", strtotime($opening["start"])) ?>" data-opening-end="<?= date("H:i", strtotime($opening["end"])) ?>" data-opening-description="<?= $opening["description"] ?>" data-opening-places="<?= $opening["places"] ?>" class=" opacity-80 hover:opacity-100 w-full overflow-hidden bg-red-300 rounded-md absolute <?= $timeHeight[date("G", strtotime($opening["end"])) - date("G", strtotime($opening["start"]))] ?> <?= $timeTop[date("G", strtotime($opening["start"]))] ?>">
                                     <div class="px-3 py-2 font-medium"><?= date("G:i", strtotime($opening["start"])) ?> - <?= date("G:i", strtotime($opening["end"])) ?></div>
                                 </div>
                             <?php } ?>
@@ -116,7 +116,7 @@ function viewOpeningsCalendar($calendar, $canManage = false)
                         <?php } ?>
                         <?php foreach ($calendar["openings"] as $opening) { ?>
                             <?php if (date("j", strtotime($opening["start"])) == $i) { ?>
-                                <div data-opening-description="<?= $opening["description"] ?>" data-opening-places="<?= $opening["places"] ?>" class=" opacity-80 hover:opacity-100 w-full overflow-hidden bg-red-300 rounded-md absolute <?= $timeHeight[date("G", strtotime($opening["end"])) - date("G", strtotime($opening["start"]))] ?> <?= $timeTop[date("G", strtotime($opening["start"]))] ?>">
+                                <div calendar-item data-opening-start="<?= date("H:i", strtotime($opening["start"])) ?>" data-opening-end="<?= date("H:i", strtotime($opening["end"])) ?>" data-opening-description="<?= $opening["description"] ?>" data-opening-places="<?= $opening["places"] ?>" class=" opacity-80 hover:opacity-100 w-full overflow-hidden bg-red-300 rounded-md absolute <?= $timeHeight[date("G", strtotime($opening["end"])) - date("G", strtotime($opening["start"]))] ?> <?= $timeTop[date("G", strtotime($opening["start"]))] ?>">
                                     <div class="px-3 py-1 font-medium"><?= date("G:i", strtotime($opening["start"])) ?> - <?= date("G:i", strtotime($opening["end"])) ?></div>
                                 </div>
                             <?php } ?>
@@ -138,6 +138,7 @@ function viewOpeningsCalendar($calendar, $canManage = false)
     <?php if ($canManage) { ?>
         <script type="module" src="/view/js/collapse.js"></script>
     <?php } ?>
+    <script type="module" src="/view/js/openingCalendar.js"></script>
 <?php
 
     $foot = ob_get_clean();
