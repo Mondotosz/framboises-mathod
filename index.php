@@ -5,6 +5,8 @@ session_start();
 
 // Global dependencies
 require_once("lib/utils.php");
+setlocale(LC_ALL, 'fr-CH');
+date_default_timezone_set("Europe/Zurich");
 
 // Controllers
 require_once("controller/static.php");
@@ -13,6 +15,7 @@ require_once("controller/administration.php");
 require_once("controller/recipes.php");
 require_once("controller/products.php");
 require_once("controller/permissions.php");
+require_once("controller/openings.php");
 
 // Router
 // Remove get parameters
@@ -27,6 +30,9 @@ switch ($uri) {
         break;
     case '/location':
         location();
+        break;
+    case '/openings':
+        openingsCalendar();
         break;
     case '/varieties':
         varietyList($_GET);
