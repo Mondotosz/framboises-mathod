@@ -43,6 +43,9 @@ switch ($uri) {
     case '/varieties/new':
         varietyAdd($_POST, $_FILES);
         break;
+    case '/openings/new':
+        openingNew($_POST);
+        break;
     case '/recipes/new':
         recipeAdd($_POST, $_FILES);
         break;
