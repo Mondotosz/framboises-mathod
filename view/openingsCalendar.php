@@ -89,14 +89,25 @@ function viewOpeningsCalendar($calendar, $canManage = false)
         <div class="flex-row hidden w-full divide-x-2 divide-red-300 md:flex justify-evenly border-2 border-red-300 rounded-md">
             <?php for ($i = date("j", $calendar["start"]); $i <= date("j", $calendar["end"]); $i++) { ?>
                 <div class="flex flex-col w-full divide-y-2 divide-red-300">
-                    <div class="mx-auto font-medium"><?= strftime("%A %d", strtotime("+$i days", strtotime($calendar["start"]))) ?></div>
+                    <div class="mx-auto font-medium"><?= strftime("%A %d", strtotime("+".$i- date("j", $calendar["start"]) ." days", $calendar["start"])) ?></div>
                     <div class="relative h-144">
                         <?php if (date("Y-m-d", time()) == date("Y-m-d", strtotime("+" . $i - 1 . " days", strtotime(date("Y-m", $calendar["start"]))))) { ?>
                             <div class="w-full absolute ring-2 ring-red-500 <?= $timeTop[date("G")] ?>"></div>
                         <?php } ?>
                         <?php foreach ($calendar["openings"] as $opening) { ?>
-                            <?php if (date("j", strtotime($opening["start"])) == $i) { ?>
+                            <?php /* same day start/end */ ?>
+                            <?php if (date("j", strtotime($opening["start"])) == $i && date("j", strtotime($opening["end"])) == $i) { ?>
                                 <div calendar-item data-opening-start="<?= date("H:i", strtotime($opening["start"])) ?>" data-opening-end="<?= date("H:i", strtotime($opening["end"])) ?>" data-opening-description="<?= $opening["description"] ?>" data-opening-places="<?= $opening["places"] ?>" class=" opacity-80 hover:opacity-100 w-full overflow-hidden bg-red-300 rounded-md absolute border-l-2 border-r-2 border-transparent bg-clip-padding <?= $timeHeight[date("G", strtotime($opening["end"])) - date("G", strtotime($opening["start"]))] ?> <?= $timeTop[date("G", strtotime($opening["start"]))] ?>">
+                                    <div class="px-3 py-2 font-medium"><?= date("G:i", strtotime($opening["start"])) ?> - <?= date("G:i", strtotime($opening["end"])) ?></div>
+                                </div>
+
+                            <?php } else if (date("j", strtotime($opening["start"])) == $i && date("j", strtotime($opening["end"])) > $i) { ?>
+                                <div calendar-item data-opening-start="<?= date("H:i", strtotime($opening["start"])) ?>" data-opening-end="<?= date("H:i", strtotime($opening["end"])) ?>" data-opening-description="<?= $opening["description"] ?>" data-opening-places="<?= $opening["places"] ?>" class=" opacity-80 hover:opacity-100 w-full overflow-hidden bg-red-300 rounded-md absolute border-l-2 border-r-2 border-transparent bg-clip-padding <?= $timeHeight[24 - date("G", strtotime($opening["start"]))] ?> <?= $timeTop[date("G", strtotime($opening["start"]))] ?>">
+                                    <div class="px-3 py-2 font-medium"><?= date("G:i", strtotime($opening["start"])) ?> - <?= date("G:i", strtotime($opening["end"])) ?></div>
+                                </div>
+
+                            <?php } else if (date("j", strtotime($opening["start"])) < $i && date("j", strtotime($opening["end"])) == $i && date("G", strtotime($opening["end"])) != 0) { ?>
+                                <div calendar-item data-opening-start="<?= date("H:i", strtotime($opening["start"])) ?>" data-opening-end="<?= date("H:i", strtotime($opening["end"])) ?>" data-opening-description="<?= $opening["description"] ?>" data-opening-places="<?= $opening["places"] ?>" class=" opacity-80 hover:opacity-100 w-full overflow-hidden bg-red-300 rounded-md absolute border-l-2 border-r-2 border-transparent bg-clip-padding <?= $timeHeight[date("G", strtotime($opening["end"]))] ?>">
                                     <div class="px-3 py-2 font-medium"><?= date("G:i", strtotime($opening["start"])) ?> - <?= date("G:i", strtotime($opening["end"])) ?></div>
                                 </div>
                             <?php } ?>
@@ -107,18 +118,30 @@ function viewOpeningsCalendar($calendar, $canManage = false)
         </div>
         <?php /* Mobile view */ ?>
         <div class="flex flex-col w-full divide-y-2 divide-red-300 md:hidden">
-            <?php for ($i = date("j", $calendar["start"]); $i <= date("j", $calendar["end"]); $i++) { ?>
+            <?php for ($i = date("j", $calendar["start"]) + 2; $i <= date("j", $calendar["end"]) - 1; $i++) { ?>
                 <div class="flex flex-col w-full">
-                    <div class="mx-auto font-medium"><?= strftime("%A %d", strtotime("+$i days", strtotime($calendar["start"]))) ?></div>
-                    <div class="relative h-64">
+                    <div class="mx-auto font-medium"><?= strftime("%A %d", strtotime("+" . $i - date("j", $calendar["start"]) . " days", $calendar["start"])) ?></div>
+                    <div class="relative h-128">
                         <?php if (date("Y-m-d", time()) == date("Y-m-d", strtotime("+" . $i - 1 . " days", strtotime(date("Y-m", $calendar["start"]))))) { ?>
                             <div class="w-full absolute ring-2 ring-red-500 <?= $timeTop[date("G")] ?>"></div>
                         <?php } ?>
                         <?php foreach ($calendar["openings"] as $opening) { ?>
-                            <?php if (date("j", strtotime($opening["start"])) == $i) { ?>
+                            <?php /* same day start/end */ ?>
+                            <?php if (date("j", strtotime($opening["start"])) == $i && date("j", strtotime($opening["end"])) == $i) { ?>
                                 <div calendar-item data-opening-start="<?= date("H:i", strtotime($opening["start"])) ?>" data-opening-end="<?= date("H:i", strtotime($opening["end"])) ?>" data-opening-description="<?= $opening["description"] ?>" data-opening-places="<?= $opening["places"] ?>" class=" opacity-80 hover:opacity-100 w-full overflow-hidden bg-red-300 rounded-md absolute border-l-2 border-r-2 border-transparent bg-clip-padding <?= $timeHeight[date("G", strtotime($opening["end"])) - date("G", strtotime($opening["start"]))] ?> <?= $timeTop[date("G", strtotime($opening["start"]))] ?>">
-                                    <div class="px-3 py-1 font-medium"><?= date("G:i", strtotime($opening["start"])) ?> - <?= date("G:i", strtotime($opening["end"])) ?></div>
+                                    <div class="px-3 py-2 font-medium"><?= date("G:i", strtotime($opening["start"])) ?> - <?= date("G:i", strtotime($opening["end"])) ?></div>
                                 </div>
+
+                            <?php } else if (date("j", strtotime($opening["start"])) == $i && date("j", strtotime($opening["end"])) > $i) { ?>
+                                <div calendar-item data-opening-start="<?= date("H:i", strtotime($opening["start"])) ?>" data-opening-end="<?= date("H:i", strtotime($opening["end"])) ?>" data-opening-description="<?= $opening["description"] ?>" data-opening-places="<?= $opening["places"] ?>" class=" opacity-80 hover:opacity-100 w-full overflow-hidden bg-red-300 rounded-md absolute border-l-2 border-r-2 border-transparent bg-clip-padding <?= $timeHeight[24 - date("G", strtotime($opening["start"]))] ?> <?= $timeTop[date("G", strtotime($opening["start"]))] ?>">
+                                    <div class="px-3 py-2 font-medium"><?= date("G:i", strtotime($opening["start"])) ?> - <?= date("G:i", strtotime($opening["end"])) ?></div>
+                                </div>
+
+                            <?php } else if (date("j", strtotime($opening["start"])) < $i && date("j", strtotime($opening["end"])) == $i && date("G", strtotime($opening["end"])) != 0) { ?>
+                                <div calendar-item data-opening-start="<?= date("H:i", strtotime($opening["start"])) ?>" data-opening-end="<?= date("H:i", strtotime($opening["end"])) ?>" data-opening-description="<?= $opening["description"] ?>" data-opening-places="<?= $opening["places"] ?>" class=" opacity-80 hover:opacity-100 w-full overflow-hidden bg-red-300 rounded-md absolute border-l-2 border-r-2 border-transparent bg-clip-padding <?= $timeHeight[date("G", strtotime($opening["end"]))] ?>">
+                                    <div class="px-3 py-2 font-medium"><?= date("G:i", strtotime($opening["start"])) ?> - <?= date("G:i", strtotime($opening["end"])) ?></div>
+                                </div>
+
                             <?php } ?>
                         <?php } ?>
                     </div>
